@@ -1,12 +1,12 @@
 /*
-             .d8888b.   .d8888b.   .d8888b.  8888888888 .d8888b.  
-            d88P  Y88b d88P  Y88b d88P  Y88b 888       d88P  Y88b 
-            Y88b.      Y88b.      Y88b.      888            .d88P 
-             "Y888b.    "Y888b.    "Y888b.   8888888       8888"  
-                "Y88b.     "Y88b.     "Y88b. 888            "Y8b. 
-                  "888       "888       "888 888       888    888 
-            Y88b  d88P Y88b  d88P Y88b  d88P 888       Y88b  d88P 
-             "Y8888P"   "Y8888P"   "Y8888P"  8888888888 "Y8888P"  
+             .d8888b.   .d8888b.   .d8888b.  8888888888 .d8888b.
+            d88P  Y88b d88P  Y88b d88P  Y88b 888       d88P  Y88b
+            Y88b.      Y88b.      Y88b.      888            .d88P
+             "Y888b.    "Y888b.    "Y888b.   8888888       8888"
+                "Y88b.     "Y88b.     "Y88b. 888            "Y8b.
+                  "888       "888       "888 888       888    888
+            Y88b  d88P Y88b  d88P Y88b  d88P 888       Y88b  d88P
+             "Y8888P"   "Y8888P"   "Y8888P"  8888888888 "Y8888P"
 */
 
 #include "opemu.h"
@@ -107,28 +107,28 @@ inline void _sstore_gpr32 (ud_type_t n, uint32_t *where) {
 	struct pt_regs *regs;
 	switch (n) {
 		case UD_R_EAX:
-			*where = &regs->ax;
+			*where = (uint32_t)&regs->ax;
 			break;
 		case UD_R_ECX:
-			*where = &regs->cx;
+			*where = (uint32_t)&regs->cx;
 			break;
 		case UD_R_EDX:
-			*where = &regs->dx;
+			*where = (uint32_t)&regs->dx;
 			break;
 		case UD_R_EBX:
-			*where = &regs->bx;
+			*where = (uint32_t)&regs->bx;
 			break;
 		case UD_R_ESP:
-			*where = &regs->sp;
+			*where = (uint32_t)&regs->sp;
 			break;
 		case UD_R_EBP:
-			*where = &regs->bp;
+			*where = (uint32_t)&regs->bp;
 			break;
 		case UD_R_ESI:
-			*where = &regs->si;
+			*where = (uint32_t)&regs->si;
 			break;
 		case UD_R_EDI:
-			*where = &regs->di;
+			*where = (uint32_t)&regs->di;
 			break;
 	}
 }
@@ -137,28 +137,28 @@ inline void _sstore_gpr64 (ud_type_t n, uint64_t *where) {
 	struct pt_regs *regs;
 	switch (n) {
 		case UD_R_RAX:
-			*where = &regs->ax;
+			*where = (uint64_t)&regs->ax;
 			break;
 		case UD_R_RCX:
-			*where = &regs->cx;
+			*where = (uint64_t)&regs->cx;
 			break;
 		case UD_R_RDX:
-			*where = &regs->dx;
+			*where = (uint64_t)&regs->dx;
 			break;
 		case UD_R_RBX:
-			*where = &regs->bx;
+			*where = (uint64_t)&regs->bx;
 			break;
 		case UD_R_RSP:
-			*where = &regs->sp;
+			*where = (uint64_t)&regs->sp;
 			break;
 		case UD_R_RBP:
-			*where = &regs->bp;
+			*where = (uint64_t)&regs->bp;
 			break;
 		case UD_R_RSI:
-			*where = &regs->si;
+			*where = (uint64_t)&regs->si;
 			break;
 		case UD_R_RDI:
-			*where = &regs->di;
+			*where = (uint64_t)&regs->di;
 			break;
 	}
 }
@@ -228,7 +228,7 @@ int ssse3_grab_operands(ssse3_t *ssse3_obj)
 	} else {
 		printk("mem");
 	}
-	
+
 	if (ssse3_obj->udo_src->type == UD_OP_REG) {
 		if (ud_insn_mnemonic(ssse3_obj->op_obj->ud_obj) == UD_Iroundss) {
 			_fstore_xmm (ssse3_obj->udo_src->base - UD_R_XMM0, &ssse3_obj->src.fa32[0]);
@@ -257,7 +257,7 @@ int ssse3_grab_operands(ssse3_t *ssse3_obj)
 			int64_t disp = 0;
 			uint8_t disp_size = ssse3_obj->udo_src->offset;
 			uint64_t address;
-			
+
 			if (ssse3_obj->udo_src->scale) goto bad; // TODO
 
 			if (retrieve_reg (ssse3_obj->op_obj->state,
@@ -274,14 +274,14 @@ int ssse3_grab_operands(ssse3_t *ssse3_obj)
 
 			if (ssse3_obj->op_obj->ring0)
 				ssse3_obj->src.uint64[0] = * ((uint64_t*) (address));
-			else copy_from_user((char*) &ssse3_obj->src.uint64[0], address, 8);
+			else copy_from_user((char*) &ssse3_obj->src.uint64[0], (const void __user *)address, 8);
 		}
 		else if (ssse3_obj->udo_src->size == 128) {
 			// m128 load
 			int64_t disp = 0;
 			uint8_t disp_size = ssse3_obj->udo_src->offset;
 			uint64_t address;
-			
+
 			if (ssse3_obj->udo_src->scale) goto bad; // TODO
 
 			if (retrieve_reg (ssse3_obj->op_obj->state,
@@ -298,13 +298,13 @@ int ssse3_grab_operands(ssse3_t *ssse3_obj)
 
 			if (ssse3_obj->op_obj->ring0)
 				ssse3_obj->src.uint128 = * ((__uint128_t*) (address));
-			else copy_from_user((char*) &ssse3_obj->src.uint128, address, 16);
+			else copy_from_user((char*) &ssse3_obj->src.uint128, (const void __user *)address, 16);
 		}
 		else {
 			printk("src mem else");
 		}
 	}
-	
+
     return 0;
     // Only reached if bad
 bad:	return -1;
@@ -317,7 +317,7 @@ bad:	return -1;
 int ssse3_commit_results(ssse3_t *ssse3_obj)
 {
 	if (ud_insn_mnemonic(ssse3_obj->op_obj->ud_obj) == UD_Iroundss) {
-		
+
 		_fload_xmm (ssse3_obj->udo_dst->base - UD_R_XMM0, (void*) &ssse3_obj->res.fa32[0]);
 	}
 	else if (ssse3_obj->ismmx) {
@@ -367,7 +367,9 @@ int op_sse3x_run(op_t *op_obj)
     case UD_Ipcmpgtq:	opf = pcmpgtq;   goto sse42_common;
     case UD_Ipopcnt:    opf = popcnt;    goto regop;
     case UD_Icrc32:     opf = crc32_op;  goto regop;
-    
+    //
+    case UD_Ipmaxud:    opf = pmaxud;    goto ssse3_common;
+    case UD_Ipminud:    opf = pminud;    goto ssse3_common;
     //SSE 4.1
     //case UD_Iblendpd: opf = blendpd;	goto ssse3_common;
     //case UD_Iblendps: opf = blendps;	goto ssse3_common;
@@ -393,7 +395,7 @@ int op_sse3x_run(op_t *op_obj)
     case UD_Ipinsrd: opf = pinsrd;	goto ssse3_common;
     case UD_Ipinsrq: opf = pinsrq;	goto ssse3_common;
 
-sse42_common:	
+sse42_common:
 
 	goto ssse3_common;
 
@@ -422,7 +424,7 @@ sse42_common:
 
 	case UD_Iphaddsw:	opf = phaddsw;	goto ssse3_common;
 ssse3_common:
-	
+
 	ssse3_obj.udo_src = ud_insn_opr (op_obj->ud_obj, 1);
 	ssse3_obj.udo_dst = ud_insn_opr (op_obj->ud_obj, 0);
 	ssse3_obj.udo_imm = ud_insn_opr (op_obj->ud_obj, 2);
@@ -434,7 +436,7 @@ ssse3_common:
 	if ((ssse3_obj.udo_dst->base >= UD_R_MM0) && (ssse3_obj.udo_dst->base <= UD_R_MM7)) {
 		ssse3_obj.ismmx = 1;
 	} else ssse3_obj.ismmx = 0;
-	
+
 	ssse3_obj.dst64 = ssse3_obj.dst32 = 0;
 
 	if (ssse3_grab_operands(&ssse3_obj) != 0) goto bad;
@@ -454,7 +456,7 @@ regop:
 
     opf(&ssse3_obj);
 
-good:	
+good:
 	if (ssse3_obj.dst64) {
 
 		//printk("OPEMUq:  %s\n", ud_insn_asm(op_obj->ud_obj));
@@ -465,8 +467,8 @@ good:
 		op_obj->dst32 = (uint8_t) 1;
 		op_obj->res32 = (uint32_t) ssse3_obj.res.uint32[0];
 	}
-	
-	
+
+
 	//uint64_t ek;
 	//asm __volatile__ ("movq %%rcx, %0" : "=m" (ek) :);
 	//printk("good rcx: %u", ek);
@@ -598,7 +600,7 @@ void pabsd (ssse3_t *this)
 
 /**
  * Concatenate and shift
- */ 
+ */
 void palignr (ssse3_t *this)
 {
 	uint8_t imm = this->udo_imm->lval.ubyte;
@@ -619,7 +621,7 @@ void palignr (ssse3_t *this)
 		shiftp = (uint8_t*) &temp1[0];
 		shiftp += imm;
         shiftpaddr = (uint64_t)shiftp;
-		this->res.uint128 = ((__uint128_t*) shiftpaddr);
+		this->res.uint128 = *((__uint128_t*) shiftpaddr);
 	}
 }
 
@@ -682,7 +684,7 @@ void pmaddubsw (ssse3_t *this)
 		++res;
 		src += 2;
 		dst += 2;
-	}	
+	}
 }
 
 /**
