@@ -621,7 +621,7 @@ void palignr (ssse3_t *this)
 		shiftp = (uint8_t*) &temp1[0];
 		shiftp += imm;
         shiftpaddr = (uint64_t)shiftp;
-		this->res.uint128 = *((__uint128_t*) shiftpaddr);
+		this->res.uint128 = ((__uint128_t) shiftpaddr);
 	}
 }
 
