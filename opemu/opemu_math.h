@@ -1,4 +1,3 @@
-#include <stdint.h>
 
 /* Needed unions */
 typedef union
