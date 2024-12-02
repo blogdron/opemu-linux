@@ -1,12 +1,15 @@
 ## OPEMU for Linux for my local experiments
 
-Before use read this 
+Before use read this
 
  * https://github.com/mirh/opemu-linux/pull/1
 
+Use original repo, this repo just for my experiments, or take code from this
+repo and add it in main repo if you need it :)
+
 ### Notice
 ```diff
-- [warning this is experimentall fork]
+- [warning this is experimentall fork, can be broken]
 ```
  - TODO
    - fix compiler warnings
