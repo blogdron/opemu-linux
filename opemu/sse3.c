@@ -44,8 +44,19 @@ int sse3_grab_operands(sse3_t *sse3_obj)
 			address += disp;
 
 			if (sse3_obj->op_obj->ring0)
+            {
 				sse3_obj->src.uint64[0] = * ((uint64_t*) (address));
-			else copy_from_user((char*) &sse3_obj->src.uint64[0], ( const void __user *)address, 8);
+            }
+			else
+            {
+                unsigned long status =
+                copy_from_user((char*) &sse3_obj->src.uint64[0], (uint64_t*)address, 8);
+                if(status != 0)
+                {
+                    //FIXME: need handle, no just allert
+                    printk("OPEMU:ERROR copy_from_user() status %lu %s %d",status,__FILE__,__LINE__);
+                }
+            }
 		}
 	} else {
 		_store_xmm (sse3_obj->udo_dst->base - UD_R_XMM0, &sse3_obj->dst.uint128);
@@ -72,8 +83,19 @@ int sse3_grab_operands(sse3_t *sse3_obj)
 			address += disp;
 
 			if (sse3_obj->op_obj->ring0)
+            {
 				sse3_obj->src.uint128 = * ((__uint128_t*) (address));
-			else copy_from_user((char*) &sse3_obj->src.uint128,(const void __user *)address, 16);
+            }
+			else
+            {
+                unsigned long status =
+                copy_from_user((char*) &sse3_obj->src.uint128, (uint64_t*)address, 16);
+                if(status != 0)
+                {
+                    //FIXME: need handle, no just allert
+                    printk("OPEMU:ERROR copy_from_user() status %lu %s %d",status,__FILE__,__LINE__);
+                }
+            }
 		}
 	}
 

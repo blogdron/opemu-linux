@@ -104,63 +104,79 @@ case 7:  loadq_template(7, where); break;
 }}
 
 inline void _sstore_gpr32 (ud_type_t n, uint32_t *where) {
-	struct pt_regs *regs;
+/*
+    FIXME: This function nothing do. Getting regisers value from trash pointer
+           and this function write unsigned long in uint32 (unsigned int) ned
+           set ifdefs in result implementation for serarate 64 and 32 mashines
+           but this functions call only for 32bit and we can just cast type?
+    https://elixir.bootlin.com/linux/v6.0/source/arch/x86/include/asm/ptrace.h
+    ---------------------------------------------------------------------------
+    struct pt_regs *regs;
 	switch (n) {
 		case UD_R_EAX:
-			*where = (uint32_t)&regs->ax;
+			*where = &regs->ax;
 			break;
 		case UD_R_ECX:
-			*where = (uint32_t)&regs->cx;
+			*where = &regs->cx;
 			break;
 		case UD_R_EDX:
-			*where = (uint32_t)&regs->dx;
+			*where = &regs->dx;
 			break;
 		case UD_R_EBX:
-			*where = (uint32_t)&regs->bx;
+			*where = &regs->bx;
 			break;
 		case UD_R_ESP:
-			*where = (uint32_t)&regs->sp;
+			*where = &regs->sp;
 			break;
 		case UD_R_EBP:
-			*where = (uint32_t)&regs->bp;
+			*where = &regs->bp;
 			break;
 		case UD_R_ESI:
-			*where = (uint32_t)&regs->si;
+			*where = &regs->si;
 			break;
 		case UD_R_EDI:
-			*where = (uint32_t)&regs->di;
+			*where = &regs->di;
 			break;
 	}
+*/
 }
 
 inline void _sstore_gpr64 (ud_type_t n, uint64_t *where) {
+/*
+    FIXME: This function nothing do. Getting regisers value from trash pointer
+           and this function write unsigned long in uint32 (unsigned int) ned
+           set ifdefs in result implementation for serarate 64 and 32 mashines
+           but this functions call only for 32bit and we can just cast type?
+    https://elixir.bootlin.com/linux/v6.0/source/arch/x86/include/asm/ptrace.h
+    ---------------------------------------------------------------------------
 	struct pt_regs *regs;
 	switch (n) {
 		case UD_R_RAX:
-			*where = (uint64_t)&regs->ax;
+			*where = &regs->ax;
 			break;
 		case UD_R_RCX:
-			*where = (uint64_t)&regs->cx;
+			*where = &regs->cx;
 			break;
 		case UD_R_RDX:
-			*where = (uint64_t)&regs->dx;
+			*where = &regs->dx;
 			break;
 		case UD_R_RBX:
-			*where = (uint64_t)&regs->bx;
+			*where = &regs->bx;
 			break;
 		case UD_R_RSP:
-			*where = (uint64_t)&regs->sp;
+			*where = &regs->sp;
 			break;
 		case UD_R_RBP:
-			*where = (uint64_t)&regs->bp;
+			*where = &regs->bp;
 			break;
 		case UD_R_RSI:
-			*where = (uint64_t)&regs->si;
+			*where = &regs->si;
 			break;
 		case UD_R_RDI:
-			*where = (uint64_t)&regs->di;
+			*where = &regs->di;
 			break;
 	}
+*/
 }
 
 inline void _fstore_xmm (const uint8_t n, float *where)
@@ -273,8 +289,19 @@ int ssse3_grab_operands(ssse3_t *ssse3_obj)
 			address += disp;
 
 			if (ssse3_obj->op_obj->ring0)
+            {
 				ssse3_obj->src.uint64[0] = * ((uint64_t*) (address));
-			else copy_from_user((char*) &ssse3_obj->src.uint64[0], (const void __user *)address, 8);
+            }
+			else
+            {
+                unsigned long status =
+                copy_from_user((char*) &ssse3_obj->src.uint64[0], (uint64_t*)address, 8);
+                if(status != 0)
+                {
+                    //FIXME: need handle, no just allert
+                    printk("OPEMU:ERROR copy_from_user() status %lu %s %d",status,__FILE__,__LINE__);
+                }
+            }
 		}
 		else if (ssse3_obj->udo_src->size == 128) {
 			// m128 load
@@ -297,8 +324,19 @@ int ssse3_grab_operands(ssse3_t *ssse3_obj)
 			address += disp;
 
 			if (ssse3_obj->op_obj->ring0)
+            {
 				ssse3_obj->src.uint128 = * ((__uint128_t*) (address));
-			else copy_from_user((char*) &ssse3_obj->src.uint128, (const void __user *)address, 16);
+            }
+			else
+            {
+                unsigned long status =
+                copy_from_user((char*) &ssse3_obj->src.uint128, (uint64_t*)address, 16);
+                if(status != 0)
+                {
+                    //FIXME: need handle, no just allert
+                    printk("OPEMU:ERROR copy_from_user() status %lu %s %d",status,__FILE__,__LINE__);
+                }
+            }
 		}
 		else {
 			printk("src mem else");
@@ -367,10 +405,10 @@ int op_sse3x_run(op_t *op_obj)
     case UD_Ipcmpgtq:	opf = pcmpgtq;   goto sse42_common;
     case UD_Ipopcnt:    opf = popcnt;    goto regop;
     case UD_Icrc32:     opf = crc32_op;  goto regop;
-    //
-    case UD_Ipmaxud:    opf = pmaxud;    goto ssse3_common;
-    case UD_Ipminud:    opf = pminud;    goto ssse3_common;
+
     //SSE 4.1
+    case UD_Ipmaxud: opf = pmaxud;	goto ssse3_common;
+    case UD_Ipminud: opf = pminud;	goto ssse3_common;
     //case UD_Iblendpd: opf = blendpd;	goto ssse3_common;
     //case UD_Iblendps: opf = blendps;	goto ssse3_common;
     //case UD_Ipblendw: opf = pblendw;	goto ssse3_common;
@@ -386,6 +424,7 @@ int op_sse3x_run(op_t *op_obj)
     //case UD_Ipmovzxdq: opf = pmovzxdq;	goto ssse3_common;
     //case UD_Ipmovzxwd: opf = pmovzxwd;	goto ssse3_common;
     //case UD_Ipmovzxwq: opf = pmovzxwq;	goto ssse3_common;
+    //
     case UD_Iroundss: opf = roundss;	goto ssse3_common;
     case UD_Ipextrb: opf = pextrb;	goto ssse3_common;
     case UD_Ipextrd: opf = pextrd;	goto ssse3_common;
@@ -615,13 +654,13 @@ void palignr (ssse3_t *this)
         // AnV - Cast fixed
 		__uint128_t temp1[2];
 		uint8_t *shiftp; // that type matters for pointer arithmetic
-        uint64_t shiftpaddr;
+        uint64_t shiftpaddr; //XXX:why this need?
 		temp1[0] = this->src.uint128;
 		temp1[1] = this->dst.uint128;
 		shiftp = (uint8_t*) &temp1[0];
 		shiftp += imm;
-        shiftpaddr = (uint64_t)shiftp;
-		this->res.uint128 = ((__uint128_t) shiftpaddr);
+        shiftpaddr = (uint64_t)shiftp;//XXX:why?
+		this->res.uint128 = ((__uint128_t) shiftpaddr);//WTF Cast?
 	}
 }
 

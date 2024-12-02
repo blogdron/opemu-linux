@@ -1,7 +1,7 @@
 #pragma once
 
 #include "opemu.h"
-#include "libudis86/extern.h"
+#include "../libudis86/extern.h"
 
 // log function debug
 #define LF	D("%s\n", __PRETTY_FUNCTION__);

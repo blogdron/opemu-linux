@@ -1,0 +1,124 @@
+===============================================================================
+
+   Hello! This file for save history, authors information, contacts and other
+   useful information, if you create local fork or just make changes please
+   add information what you change or create, add you copiright info and
+   add you contact information e-mail or some public profile. Thanks :)
+
+===============================================================================
+
+    OPEMU-LINUX TRAP_HOOK KERNEL MODULE
+    ------------------------------------------------------------
+             GNU GENERAL PUBLIC LICENSE Version 2
+    ------------------------------------------------------------
+    Copyright © 2019 Meowthra. All rights reserved.
+
+    ::: Created - trap_hook.c
+    ::: Created - fpins.c
+    ::: Created - fpins.h
+
+    Original Author: trap_hook
+    Hooking kernel functions using ftrace framework
+    Copyright © 2018 ilammy. All rights reserved.
+
+    Origin: https://github.com/ilammy/ftrace-hook/tree/master
+
+===============================================================================
+
+    OPEMU OPCODE EMULATOR
+    -------------------------------------------------------------
+                      ??????  The MIT License ??????
+    https://github.com/mirh/opemu-linux/pull/1#issuecomment-1974967578
+    http://web.archive.org/web/20241202092907/https://github.com/mirh/opemu-linux/pull/1
+    -------------------------------------------------------------
+    Copyright © 2012-2023 SINETEK. <philmb3487@proton.me> All rights reserved.
+    Copyright © 2012-2023 ANV.       All rights reserved.
+    Copyright © 2012-2023 BRONZIVKA. All rights reserved.
+
+    ::: Created - opemu.c
+    ::: Created - opemu.h
+    ::: Created - opemu_math.c
+    ::: Created - opemu_math.h
+    ::: Created - sse3.c
+    ::: Created - sse3_priv.h
+    ::: Created - sse42.c
+    ::: Created - ssse3.c
+    ::: Created - ssse3_priv.h
+
+   Origin: https://github.com/philmb3487/xnu-amd/tree/master/osfmk/OPEMU
+
+===============================================================================
+
+    LIBUIDS86 LIBRARY
+    ------------------------------------------------------------
+              BSD 2-Clause "Simplified" License
+    ------------------------------------------------------------
+    Copyright (c) 2002-2012, Vivek Thampi <vivek.mt@gmail.com>
+
+    ::: Created - libuids86/*.c
+    ::: Created - libuids86/*.h
+
+    Created library libuids86, this library used as subproject
+    for opemu-linux kernel module see libuids86/LICENSE file
+
+    Origin: https://github.com/vmt/udis86/tree/master
+
+===============================================================================
+
+    Copyright (c) 2019 saviosg <https://github.com/saviosg>
+
+    ::: Create - Makefile
+    ::: Combine into project all first files
+
+    * Create first commit to opemu-linux kernel module with all project files
+      to main repo https://github.com/mirh/opemu-linux
+
+===============================================================================
+
+    Copyright (c) 2020 mirh <https://github.com/mirh>
+    Copyright (c) 2020 Andy Vandijck <>
+
+    ::: Modifed - opemu.c
+    ::: Modifed - opemu.h
+    ::: Modifed - sse3.c
+    ::: Modifed - sse42.c
+    ::: Modifed - ssse3.c
+    ::: Modifed - ssse3_priv.h
+
+    * Create changes for POPCNT and CRC32
+    * Create main repo https://github.com/mirh/opemu-linux
+
+===============================================================================
+
+    Copyright (c) 2023 Spacefish <timo.witte@gmail.com>
+
+    ::: Modifed - fpins.c
+    ::: Modifed - sse41.c
+    ::: Modifed - ssse3_priv.h
+
+    * Created changes for build on modern Linux kernels
+
+===============================================================================
+
+    Copyright (c) 2023-2024 Fedor Elizarov <blogdron@gmail.com>
+
+    ::: Modifed - sse3.c
+    ::: Modifed - sse41.c
+    ::: Modifed - sse42.c
+    ::: Modifed - ssse3.c
+    ::: Modifed - ssse3_priv.h
+    ::: Rewrite - Makefile
+    ::: Create  - CREDITS
+
+    * Restructure project files
+    * Add implements pmaxud and pminud opcodes
+    * Reimplement some opcodes in sse41.c
+    * Fix build with gcc-14, type casts
+===============================================================================
+
+
+
+
+
+
+

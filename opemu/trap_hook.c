@@ -97,6 +97,7 @@ static int do_register_kprobe(struct kprobe* kp, char* symbol_name, void* handle
 }
 
 // this is the function that I have modified, as the name suggests it returns a pointer to the extracted kallsyms_lookup_name function
+kln_p get_kln_p(void);
 kln_p get_kln_p(void) {
     int status;
 
@@ -163,6 +164,8 @@ static void notrace fh_ftrace_thunk(unsigned long ip, unsigned long parent_ip,
  *
  * Returns: zero on success, negative error code otherwise.
  */
+
+int fh_install_hook(struct ftrace_hook *hook);
 int fh_install_hook(struct ftrace_hook *hook)
 {
     int err;
@@ -202,6 +205,8 @@ int fh_install_hook(struct ftrace_hook *hook)
  * fh_remove_hooks() - disable and unregister a single hook
  * @hook: a hook to remove
  */
+
+void fh_remove_hook(struct ftrace_hook *hook);
 void fh_remove_hook(struct ftrace_hook *hook)
 {
     int err;
@@ -226,6 +231,8 @@ void fh_remove_hook(struct ftrace_hook *hook)
  *
  * Returns: zero on success, negative error code otherwise.
  */
+
+int fh_install_hooks(struct ftrace_hook *hooks, size_t count);
 int fh_install_hooks(struct ftrace_hook *hooks, size_t count)
 {
     int err;
@@ -252,6 +259,8 @@ error:
  * @hooks: array of hooks to remove
  * @count: number of hooks to remove
  */
+
+void fh_remove_hooks(struct ftrace_hook *hooks, size_t count);
 void fh_remove_hooks(struct ftrace_hook *hooks, size_t count)
 {
     size_t i;
@@ -288,7 +297,7 @@ static int user_trap(struct pt_regs *regs, unsigned long trapnr) {
 static void (*orig_do_error_trap)(struct pt_regs *regs, long error_code, char *str, unsigned long trapnr, int signr);
 
 static void fh_do_error_trap(struct pt_regs *regs, long error_code, char *str, unsigned long trapnr, int signr) {
-    
+
     if (user_mode(regs)) {
         if (user_trap(regs, trapnr))
             return;
@@ -328,11 +337,11 @@ static struct ftrace_hook demo_hooks[] = {
 static int fh_init(void)
 {
     int err;
-    
+
     err = fh_install_hooks(demo_hooks, ARRAY_SIZE(demo_hooks));
     if (err)
         return err;
-    
+
     pr_info("module loaded\n");
     return 0;
 }

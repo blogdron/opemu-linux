@@ -1,7 +1,7 @@
 #pragma once
 
 #include "opemu.h"
-#include "libudis86/extern.h"
+#include "../libudis86/extern.h"
 #include "fpins.h"
 #include <asm/fpu/types.h>
 
@@ -185,6 +185,7 @@ inline void pinsrd	(ssse3_t*);
 inline void pinsrq	(ssse3_t*);
 inline void pmaxud (ssse3_t*);
 inline void pminud (ssse3_t*);
+
 
 /*** SSE4.2 TODO move this somewhere else ***/
 inline void pcmpistri	(ssse3_t*);

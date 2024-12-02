@@ -606,9 +606,18 @@ static void getmemoperand(ssse3_t *this, uint8_t *size, uint64_t *retval)
     address += disp;
 
     if (this->op_obj->ring0)
+    {
         retval[0] = *((uint64_t*)(address));
-    else
-        copy_from_user ((char*) &retval[0],(const void __user *)address, 8);
+    }
+    else{
+        unsigned long status =
+        copy_from_user ((char*) &retval[0], (uint64_t*)address, 8);
+        if(status != 0)
+        {
+            //FIXME: need handle, no just allert
+            printk("OPEMU:ERROR copy_from_user() status %lu %s %d",status,__FILE__,__LINE__);
+        }
+    }
 }
 
 void pcmpistrm	(ssse3_t *this)
