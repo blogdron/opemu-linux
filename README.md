@@ -2,7 +2,7 @@
 
 Before use read this 
 
- * https://github.com/mirh/opemu-linux/pull/1#issuecomment-1994758292
+ * https://github.com/mirh/opemu-linux/pull/1
 
 ### Notice
 ```diff
