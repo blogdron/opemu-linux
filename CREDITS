@@ -11,7 +11,7 @@
     ------------------------------------------------------------
              GNU GENERAL PUBLIC LICENSE Version 2
     ------------------------------------------------------------
-    Copyright © 2019 Meowthra. All rights reserved.
+    Copyright © 2019 Meowthra <>
 
     ::: Created - trap_hook.c
     ::: Created - fpins.c
@@ -19,7 +19,7 @@
 
     Original Author: trap_hook
     Hooking kernel functions using ftrace framework
-    Copyright © 2018 ilammy. All rights reserved.
+    Copyright © 2018 ilammy <>
 
     Origin: https://github.com/ilammy/ftrace-hook/tree/master
 
@@ -31,9 +31,9 @@
     https://github.com/mirh/opemu-linux/pull/1#issuecomment-1974967578
     http://web.archive.org/web/20241202092907/https://github.com/mirh/opemu-linux/pull/1
     -------------------------------------------------------------
-    Copyright © 2012-2023 SINETEK. <philmb3487@proton.me> All rights reserved.
-    Copyright © 2012-2023 ANV.       All rights reserved.
-    Copyright © 2012-2023 BRONZIVKA. All rights reserved.
+    Copyright © 2012-2023 SINETEK    <philmb3487@proton.me>
+    Copyright © 2012-2023 ANV        <>
+    Copyright © 2012-2023 BRONZIVKA  <>
 
     ::: Created - opemu.c
     ::: Created - opemu.h
