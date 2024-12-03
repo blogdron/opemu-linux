@@ -1,4 +1,3 @@
-//
 //  fpins.h
 //  opemu
 //
