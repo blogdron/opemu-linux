@@ -1,4 +1,3 @@
-//
 //  trap_hook.c
 //
 //  Created by Meowthra on 2019/5/23.

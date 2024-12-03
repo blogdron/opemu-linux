@@ -1,4 +1,3 @@
-//
 //  fpins.c
 //  opemu
 //
@@ -134,11 +133,11 @@ float sqrt_sf(float fp32) {
     int i = 100;
     float a = fp32;  //IN
     float x = a / 2; //OUT
-    
+
     while(i--) {
         x = (x + a / x) / 2;
     }
-    
+
     kernel_fpu_end();
     return x;
 }
@@ -212,11 +211,11 @@ double sqrt_df(double fp64) {
    int i = 100;
     double a = fp64;  //IN
     double x = a / 2; //OUT
-    
+
     while(i--) {
         x = (x + a / x) / 2;
     }
-    
+
     kernel_fpu_end();
     return x;
 }
@@ -227,11 +226,11 @@ int isValidNumber_f32(float fp32) {
     sse_reg_t TMP;
     TMP.fa32[0] = fp32;
     int32_t val = TMP.a32[0];
-    
+
     if ( (val & 0x7F800000) == 0x7F800000 ) {
         return 0;
     }
-    
+
    kernel_fpu_end();
    return 1;
 }
@@ -241,12 +240,12 @@ int isValidNumber_f64(double fp64) {
     sse_reg_t TMP;
     TMP.fa64[0] = fp64;
     int64_t val = TMP.a64[0];
-    
+
     if ( (val & 0x7FF0000000000000ll) == 0x7FF0000000000000ll )
     {
         return 0;
     }
-    
+
     kernel_fpu_end();
     return 1;
 }
@@ -255,10 +254,10 @@ float SNanToQNaN_f32(float fp32) {
 	kernel_fpu_begin();
     sse_reg_t TMP;
     int32_t retval;
-    
+
     TMP.fa32[0] = fp32;
     int32_t val = TMP.a32[0];
-    
+
     // Check if the value is already a QNaN
     if ( (val & 0x00400000) != 0x00400000 )
     {
@@ -279,10 +278,10 @@ double SNanToQNaN_f64(double fp64) {
 	kernel_fpu_begin();
     sse_reg_t TMP;
     int64_t retval;
-    
+
     TMP.fa64[0] = fp64;
     int64_t val = TMP.a64[0];
-    
+
     // Check if the value is already a QNaN
     if ( (val & 0x0008000000000000ll) != 0x0008000000000000ll )
     {
@@ -302,13 +301,13 @@ int isNaN_f64(double fp64) {
     sse_reg_t tmp;
     tmp.fa64[0] = fp64;
     int64_t val = tmp.a64[0];
-    
+
     if ( (val & 0x7FF0000000000000ll) == 0x7FF0000000000000ll ) {
         if( (val & 0xFFFFFFFFFFFFF) != 0) {
             return 1;
         }
     }
-    
+
     return 0;
 }
 int isNaN_f32(float fp32) {
@@ -316,13 +315,13 @@ int isNaN_f32(float fp32) {
    sse_reg_t tmp;
     tmp.fa32[0] = fp32;
     int32_t val = tmp.a32[0];
-    
+
     if ( (val & 0x7F800000) == 0x7F800000 ) {
         if( (val & 0x7FFFFF) != 0) {
             return 1;
         }
     }
-    
+
     kernel_fpu_end();
     return 0;
 }

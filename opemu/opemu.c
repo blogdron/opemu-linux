@@ -1,19 +1,45 @@
-/*                                                                  8888888 8888888 8888888
-                                                                      888     888     888
-                                                                      888     888     888
-             .d88b.  88888b.   .d88b.  88888b.d88b.  888  888         888     888     888
-            d88""88b 888 "88b d8P  Y8b 888 "888 "88b 888  888         888     888     888
-            888  888 888  888 88888888 888  888  888 888  888         888     888     888
-            Y88..88P 888 d88P Y8b.     888  888  888 Y88b 888         888     888     888
-             "Y88P"  88888P"   "Y8888  888  888  888  "Y88888       8888888 8888888 8888888
-                     888
-                     888
-                     888
+/*                                                     8888888 8888888 8888888
+                                                         888     888     888
+                                                         888     888     888
+     .d88b.  88888b.   .d88b.  88888b.d88b.  888  888    888     888     888
+    d88""88b 888 "88b d8P  Y8b 888 "888 "88b 888  888    888     888     888
+    888  888 888  888 88888888 888  888  888 888  888    888     888     888
+    Y88..88P 888 d88P Y8b.     888  888  888 Y88b 888    888     888     888
+     "Y88P"  88888P"   "Y8888  888  888  888  "Y88888  8888888 8888888 8888888
+             888
+             888
+             888
+
 IM      ~ SINETEK
         ~ ANV
         ~ BRONZOVKA
-                                                                                          */
-/**
+                                                                             */
+/******************************************************************************
+* Copyright © 2012-2023 SINETEK    <philmb3487@proton.me>
+* Copyright © 2012-2023 ANV        <>
+* Copyright © 2012-2023 BRONZIVKA  <>
+*
+* Permission is hereby granted, free of charge, to any person obtaining
+* a copy of this software and associated documentation files (the
+* "Software"), to deal in the Software without restriction, including
+* without limitation the rights to use, copy, modify, merge, publish,
+* distribute, sublicense, and/or sell copies of the Software, and to
+* permit persons to whom the Software is furnished to do so, subject to
+* the following conditions:
+*
+* The above copyright notice and this permission notice shall be
+* included in all copies or substantial portions of the Software.
+*
+* THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+* EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+* MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
+* IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
+* CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
+* TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+* SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+******************************************************************************/
+
+/*
  * This is called the Opcode Emulator: it traps invalid opcode exceptions
  *   and modifies the state of the running thread accordingly.
  * There are two entry points, one for user space exceptions, and another for
@@ -961,3 +987,10 @@ int store_reg(/*const*/ struct pt_regs *regs, const ud_type_t base, uint64_t wha
 bad:
     return -1;
 }
+
+/*-----------------------------------------------------------------------------
+*    SINETEK (ORIGINAL OPEMU AUTHOR) ALLOW USE "THE MIT LICENSE" FOR OPEMU
+* -----------------------------------------------------------------------------
+* https://github.com/mirh/opemu-linux/pull/1#issuecomment-1974967578
+* http://web.archive.org/web/20241202092907/https://github.com/mirh/opemu-linux/pull/1
+------------------------------------------------------------------------------*/
