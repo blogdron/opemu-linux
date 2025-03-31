@@ -186,7 +186,6 @@ inline void pinsrq	(ssse3_t*);
 inline void pmaxud (ssse3_t*);
 inline void pminud (ssse3_t*);
 
-
 /*** SSE4.2 TODO move this somewhere else ***/
 inline void pcmpistri	(ssse3_t*);
 inline void pcmpestri	(ssse3_t*);

@@ -407,8 +407,8 @@ int op_sse3x_run(op_t *op_obj)
     case UD_Icrc32:     opf = crc32_op;  goto regop;
 
     //SSE 4.1
-    case UD_Ipmaxud: opf = pmaxud;	goto ssse3_common;
-    case UD_Ipminud: opf = pminud;	goto ssse3_common;
+    case UD_Ipmaxud:   opf = pmaxud;	goto ssse3_common;
+    case UD_Ipminud:   opf = pminud;	goto ssse3_common;
     //case UD_Iblendpd: opf = blendpd;	goto ssse3_common;
     //case UD_Iblendps: opf = blendps;	goto ssse3_common;
     //case UD_Ipblendw: opf = pblendw;	goto ssse3_common;
