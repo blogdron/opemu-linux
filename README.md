@@ -12,10 +12,13 @@ repo and add it in main repo if you need it :)
 - [warning this is experimentall fork, can be broken]
 ```
  - TODO
+   - check working on Linux version 6.13+ 
+     - issue -> https://github.com/mirh/opemu-linux/pull/1#issuecomment-2754394864
+     - need integrate transparent buil if not compability  
    - understend how all works :D
    - refractoring
-   - more sepatare code 
-   - fix compiler warnings
+   - ~~more sepatare code~~
+   - ~~fix compiler warnings~~
    - add tests for all instructions
       - maybe use single test by instructtions on assembler
       - maybe use test code contains all test instructions (some other project contains hard SIMD optimisations)
