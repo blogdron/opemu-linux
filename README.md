@@ -12,7 +12,7 @@ repo and add it in main repo if you need it :)
 - [warning this is experimentall fork, can be broken]
 ```
  - TODO
-   - check working on Linux version 6.13+ 
+   - check working on Linux version 6.13+ (now success working on 6.12.22 )
      - issue -> https://github.com/mirh/opemu-linux/pull/1#issuecomment-2754394864
      - need integrate transparent buil if not compability  
    - understend how all works :D
