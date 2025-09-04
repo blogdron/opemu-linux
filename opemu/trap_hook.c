@@ -144,16 +144,30 @@ static int fh_resolve_hook_address(struct ftrace_hook *hook)
     return 0;
 }
 
+
 static void notrace fh_ftrace_thunk(unsigned long ip, unsigned long parent_ip,
         struct ftrace_ops *ops, struct ftrace_regs *regs)
 {
     struct ftrace_hook *hook = container_of(ops, struct ftrace_hook, ops);
+#ifdef arch_ftrace_regs /* For Linux 6.13+ */
+    struct __arch_ftrace_regs * aregs = arch_ftrace_regs(regs);
+#endif
 
 #if USE_FENTRY_OFFSET
-    regs->regs.ip = (unsigned long) hook->function;
+    #ifdef arch_ftrace_regs
+        aregs->regs.ip = (unsigned long) hook->function;
+    #else
+        regs->regs.ip = (unsigned long) hook->function;
+    #endif
 #else
     if (!within_module(parent_ip, THIS_MODULE))
+    {
+    #ifdef arch_ftrace_regs
+        aregs->regs.ip = (unsigned long) hook->function;
+    #else
         regs->regs.ip = (unsigned long) hook->function;
+    #endif
+    }
 #endif
 }
 
