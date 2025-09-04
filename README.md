@@ -11,12 +11,16 @@ repo and add it in main repo if you need it :)
 ```diff
 - [warning this is experimentall fork, can be broken]
 ```
+- STATE - success working on 
+  - 6.12.22 (Debian)  
+  - 6.12.38 (Debian)
+  - 6.16.30 (Debian)
+
  - TODO
-   - check working on Linux version 6.13+ 
-     - now success working on 
-       - 6.12.22 (Debian) 
-       - 6.12.38 (Debian)
-     - issue -> https://github.com/mirh/opemu-linux/pull/1#issuecomment-2754394864
+   - BUG: CRC SSE4.2 test FAILED! in pinsrq pinsrq xmm1, rax, 0x1 work time, o_O, fuck :)
+     - maybe have other bugs need expect uncorrect calculate or data type cast in code
+   - ~~check working on Linux version 6.13+~~
+     - ~~issue -> https://github.com/mirh/opemu-linux/pull/1#issuecomment-2754394864~~
      - need integrate transparent buil if not compability  
    - understend how all works :D
    - refractoring
