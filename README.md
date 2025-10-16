@@ -17,7 +17,8 @@ repo and add it in main repo if you need it :)
   - 6.16.30 (Debian)
 
  - TODO
-   - BUG: CRC SSE4.2 test FAILED! in pinsrq pinsrq xmm1, rax, 0x1 work time, o_O, fuck :)
+   - BUG: CRC SSE4.2 test FAILED! need check all variant crc opcodes + data types from value, from pointer,
+     data sizes and others blablabla getmemoperand and his friends
      - maybe have other bugs need expect uncorrect calculate or data type cast in code
    - ~~check working on Linux version 6.13+~~
      - ~~issue -> https://github.com/mirh/opemu-linux/pull/1#issuecomment-2754394864~~
