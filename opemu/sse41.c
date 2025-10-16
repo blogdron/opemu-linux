@@ -203,17 +203,17 @@ void pextrb(ssse3_t *this)
 
     if (this->udo_dst->type == UD_OP_MEM) {
         this->res.uint8[0] = temp1;
-        printk("pextrb this->udo_dst->type == UD_OP_MEM this->res.uint8[0]: %hhu", temp1);
+        //printk("pextrb this->udo_dst->type == UD_OP_MEM this->res.uint8[0]: %hhu", temp1);
     }
     else if (islongmode && this->udo_dst->size == 64) {
         this->res.uint64[0] = 0;
         this->res.uint8[0] = temp1;
-        printk("pextrb islongmode && this->udo_dst->size == 64 this->res.uint64[0]: %hhu", temp1);
+        //printk("pextrb islongmode && this->udo_dst->size == 64 this->res.uint64[0]: %hhu", temp1);
     }
     else {
         this->res.uint32[0] = 0;
         this->res.uint8[0] = temp1;
-        printk("pextrb this->res.uint32[0]: %hhu", temp1);
+        //printk("pextrb this->res.uint32[0]: %hhu", temp1);
     }
 }
 
@@ -232,21 +232,21 @@ void pextrq(ssse3_t *this)
 
     if (this->udo_dst->type == UD_OP_MEM) {
         this->res.uint128 = temp1;
-        printk("pextrq this->udo_dst->type == UD_OP_MEM this->res.uint128: %llu", temp1);
+        //printk("pextrq this->udo_dst->type == UD_OP_MEM this->res.uint128: %llu", temp1);
     }
     else if (islongmode && this->udo_dst->size == 128) {
         this->res.uint128 = 0;
         this->res.uint128 = temp1;
-        printk("pextrq islongmode && this->udo_dst->size == 128 this->res.uint128: %llu", temp1);
+        //printk("pextrq islongmode && this->udo_dst->size == 128 this->res.uint128: %llu", temp1);
     }
     else if (islongmode && this->udo_dst->size == 64) {
         this->res.uint64[0] = 0;
         this->res.uint64[0] = temp1;
-        printk("pextrq islongmode && this->udo_dst->size == 64 this->res.uint64[0]: %hhu", temp1);
+        //printk("pextrq islongmode && this->udo_dst->size == 64 this->res.uint64[0]: %hhu", temp1);
     } else {
         this->res.uint32[0] = 0;
         this->res.uint32[0] = temp1;
-        printk("pextrq this->res.uint32[0]: %llu", temp1);
+        //printk("pextrq this->res.uint32[0]: %llu", temp1);
     }
 }
 

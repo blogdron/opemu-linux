@@ -24,6 +24,7 @@ KBUILD_CFLAGS += -DDEBUG -g -O2 -march=native  \
                                 -mmmx          \
                                 -msse          \
                                 -msse2         \
+                                -Wno-switch    \
                                 -Wimplicit-fallthrough
 ###################################################
 KERNEL_PATH ?= /lib/modules/$(shell uname -r)/build

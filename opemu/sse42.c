@@ -614,12 +614,9 @@ static void getmemoperand(ssse3_t *this, uint8_t *size, uint64_t *retval)
         return;
     }
 
-
-    printk("ADDRESS 0x%X %d %d\n",address,disp_size,*size);
-
     switch (disp_size) {
-        case 8:  disp = this->udo_src->lval.sbyte; break;
-        case 16: disp = this->udo_src->lval.sword; break;
+        case  8: disp = this->udo_src->lval.sbyte;  break;
+        case 16: disp = this->udo_src->lval.sword;  break;
         case 32: disp = this->udo_src->lval.sdword; break;
         case 64: disp = this->udo_src->lval.sqword; break;
     }
@@ -643,7 +640,6 @@ static void getmemoperand(ssse3_t *this, uint8_t *size, uint64_t *retval)
         unsigned long status =
         copy_from_user ((char*) &retval[0], (uint64_t*)address,this->udo_src->size / 8 );// FIXME: XXX: WHERE GET VALUE FOR LAST ARG?
 
-        printk("COPY FROM USEER  %llu %llu\n",*retval,*size);
         if(status != 0)
         {
             //FIXME: need handle, no just allert
@@ -990,9 +986,8 @@ void crc32_op (ssse3_t *this)
     {
         retrieve_reg(this->op_obj->state, this->udo_src->base, &size_b, &val_b);
     } else {
-        printk("getmemoperand SRC B %d\n",this->udo_src->base);
         getmemoperand(this, &size_b, &val_b);
-
+        /*
         switch(this->udo_src->type)
         {
             case UD_OP_REG: printk("SRC IS UD_OP_REG:\n");break;
@@ -1002,55 +997,37 @@ void crc32_op (ssse3_t *this)
             case UD_OP_JIMM:printk("SRC IS  UD_OP_JIMM:\n");break;
             case UD_OP_CONST:printk("SRC IS  UD_OP_CONST:\n");break;
         }
-
-
-
-
+        */
     }
 
     if (this->udo_dst->type == UD_OP_REG)
     {
         retrieve_reg(this->op_obj->state, this->udo_dst->base, &size_a, &val_a);
     } else {
-        printk("getmemoperand DST A\n");
         getmemoperand(this, &size_a, &val_a);
     }
-
-
-    printk("******* BBB %llu %llu\n",val_b,size_b);
-    printk("******* AAA %llu %llu\n",val_a,size_a);
 
     switch (size_b)
     {
         case 1:
-            printk("1 BYTE DATA\n");
             dst = compute_crc32_8 ((uint32_t)val_a, (uint8_t)val_b);
             break;
 
         case 2:
-
-            printk("2 BYTE DATA\n");
             dst = compute_crc32_16 ((uint32_t)val_a, (uint16_t)val_b);
             break;
 
         case 4:
-
-            printk("4 BYTE DATA\n");
             dst = compute_crc32_32 ((uint32_t)val_a, (uint32_t)val_b);
             break;
 
         case 8:
-
-            printk("8 BYTE DATA\n");
             dst = compute_crc32_64 (val_a,val_b);
             break;
 
         default:
-            printk("OOOOOOOOOOOOVER 8888888 BYYYYYYYTES!!!!\n");
             return;
     }
 
     store_reg(this->op_obj->state, this->udo_dst->base, (uint64_t)dst);
-    printk("CRC32VAL %llu CRCMODE %d  valA %llu valB %llu\n",dst,size_b,val_a,val_b);
-    printk("OPEMU: crc32_op %s\n", ud_insn_asm(this->op_obj->ud_obj));
 }

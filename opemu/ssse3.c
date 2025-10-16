@@ -364,7 +364,7 @@ int ssse3_commit_results(ssse3_t *ssse3_obj)
     return 0;
 
     // Only reached if bad
-    bad:    return -1;
+    //bad:    return -1;
 }
 
 
