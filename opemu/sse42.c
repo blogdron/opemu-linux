@@ -11,24 +11,24 @@
 #define MAX_BUF 16
 
 #define PCMPSTR_EQ(X, Y, RES) \
-{							\
-    int __size = (sizeof (*X) ^ 3) * 8;			\
-    int __i, __j;					\
-    for (__i = 0; __i < __size; __i++)			\
-        for (__j = 0; __j < __size; __j++)		\
-            RES[__j][__i] = (X[__i] == Y[__j]);		\
+{                            \
+    int __size = (sizeof (*X) ^ 3) * 8;            \
+    int __i, __j;                    \
+    for (__i = 0; __i < __size; __i++)            \
+        for (__j = 0; __j < __size; __j++)        \
+            RES[__j][__i] = (X[__i] == Y[__j]);        \
 }
 
 #define PCMPSTR_RNG(X, Y, RES) \
-{							\
-    int __size = (sizeof (*X) ^ 3) * 8;			\
-    int __i, __j;					\
-    for (__j = 0; __j < __size; __j++)			\
-        for (__i = 0; __i < __size - 1; __i += 2)		\
-        {						\
-            RES[__j][__i] = (Y[__j] >= X[__i]);		\
-            RES[__j][__i+1] = (Y[__j] <= X[__i + 1]);	\
-        }						\
+{                            \
+    int __size = (sizeof (*X) ^ 3) * 8;            \
+    int __i, __j;                    \
+    for (__j = 0; __j < __size; __j++)            \
+        for (__i = 0; __i < __size - 1; __i += 2)        \
+        {                        \
+            RES[__j][__i] = (Y[__j] >= X[__i]);        \
+            RES[__j][__i+1] = (Y[__j] <= X[__i + 1]);    \
+        }                        \
 }
 
 static int
@@ -451,36 +451,36 @@ cmp_im (__int128_t *a, __int128_t *b, const int mode, int *flags)
 /**
  * Compare and index string
  */
-void pcmpistri	(ssse3_t *this)
+void pcmpistri    (ssse3_t *this)
 {
-	const int imm = this->udo_imm->lval.ubyte;
-	//const int issigned = imm & 0b10;
+    const int imm = this->udo_imm->lval.ubyte;
+    //const int issigned = imm & 0b10;
     uint8_t islongmode = is_saved_state64(this->op_obj->state);
 
-	__int128_t *src = &(this->src.int128);
-	__int128_t *dst = &(this->dst.int128);
+    __int128_t *src = &(this->src.int128);
+    __int128_t *dst = &(this->dst.int128);
 
-	int res1 = 0, res2 = 0;
+    int res1 = 0, res2 = 0;
 
-	/* thanks for excusing me the nesting */
+    /* thanks for excusing me the nesting */
 
     res1 = cmp_ii(src, dst, imm, &res2);
 
 #if 0
-	printk("src: ");
-	print128(this->src);
-	printk("\n");
+    printk("src: ");
+    print128(this->src);
+    printk("\n");
 
-	printk("dst: ");
-	print128(this->dst);
-	printk("\n");
+    printk("dst: ");
+    print128(this->dst);
+    printk("\n");
 
-	printk("res: ");
-	print128(this->res);
-	printk("\n");
+    printk("res: ");
+    print128(this->res);
+    printk("\n");
 
-	printk("and the int2 is %02x\n", res2);
-	printk("and the index  is %d\n", res1);
+    printk("and the int2 is %02x\n", res2);
+    printk("and the index  is %d\n", res1);
 #endif
 
     if (islongmode)
@@ -495,38 +495,40 @@ void pcmpistri	(ssse3_t *this)
         this->op_obj->state32->flags &= ~ 0b100011010101;
         this->op_obj->state32->flags |= res2; // C
     }
+
+    printk("OPEMU: pcmpistri %s\n", ud_insn_asm(this->op_obj->ud_obj));
 }
 
-void pcmpestri	(ssse3_t *this)
+void pcmpestri    (ssse3_t *this)
 {
-	const int imm = this->udo_imm->lval.ubyte;
-	//const int issigned = imm & 0b10;
+    const int imm = this->udo_imm->lval.ubyte;
+    //const int issigned = imm & 0b10;
     uint8_t islongmode = is_saved_state64(this->op_obj->state);
 
-	__int128_t *src = &(this->src.int128);
-	__int128_t *dst = &(this->dst.int128);
+    __int128_t *src = &(this->src.int128);
+    __int128_t *dst = &(this->dst.int128);
 
-	int res1 = 0, res2 = 0;
+    int res1 = 0, res2 = 0;
 
-	/* thanks for excusing me the nesting */
+    /* thanks for excusing me the nesting */
     // FIXME: How to get la + lb parameters?
     res1 = cmp_ei(src, sizeof(*src), dst, sizeof(*dst), imm, &res2);
 
 #if 0
-	printf("src: ");
-	print128(this->src);
-	printf("\n");
+    printf("src: ");
+    print128(this->src);
+    printf("\n");
 
-	printf("dst: ");
-	print128(this->dst);
-	printf("\n");
+    printf("dst: ");
+    print128(this->dst);
+    printf("\n");
 
-	printf("res: ");
-	print128(this->res);
-	printf("\n");
+    printf("res: ");
+    print128(this->res);
+    printf("\n");
 
-	printf("and the int2 is %02x\n", res2);
-	printf("and the index  is %d\n", res1);
+    printf("and the int2 is %02x\n", res2);
+    printf("and the index  is %d\n", res1);
 #endif
 
     if (islongmode)
@@ -541,39 +543,42 @@ void pcmpestri	(ssse3_t *this)
         this->op_obj->state32->flags &= ~ 0b100011010101;
         this->op_obj->state32->flags |= res2; // C
     }
+
+
+    printk("OPEMU: pcmpestri %s\n", ud_insn_asm(this->op_obj->ud_obj));
 }
 
-void pcmpestrm	(ssse3_t *this)
+void pcmpestrm    (ssse3_t *this)
 {
-	const int imm = this->udo_imm->lval.ubyte;
-	//const int issigned = imm & 0b10;
+    const int imm = this->udo_imm->lval.ubyte;
+    //const int issigned = imm & 0b10;
     uint8_t islongmode = is_saved_state64(this->op_obj->state);
 
-	__int128_t *src = &(this->src.int128);
-	__int128_t *dst = &(this->dst.int128);
+    __int128_t *src = &(this->src.int128);
+    __int128_t *dst = &(this->dst.int128);
     __int128_t *res = &(this->res.int128);
 
-	int res2 = 0;
+    int res2 = 0;
 
-	/* thanks for excusing me the nesting */
+    /* thanks for excusing me the nesting */
     // FIXME: How to get la + lb parameters?
     *res = cmp_em(src, sizeof(*src), dst, sizeof(*dst), imm, &res2);
 
 #if 0
-	printf("src: ");
-	print128(this->src);
-	printf("\n");
+    printf("src: ");
+    print128(this->src);
+    printf("\n");
 
-	printf("dst: ");
-	print128(this->dst);
-	printf("\n");
+    printf("dst: ");
+    print128(this->dst);
+    printf("\n");
 
-	printf("res: ");
-	print128(this->res);
-	printf("\n");
+    printf("res: ");
+    print128(this->res);
+    printf("\n");
 
-	printf("and the int2 is %02x\n", res2);
-	printf("and the index  is %d\n", res1);
+    printf("and the int2 is %02x\n", res2);
+    printf("and the index  is %d\n", res1);
 #endif
 
     if (islongmode)
@@ -584,20 +589,36 @@ void pcmpestrm	(ssse3_t *this)
         this->op_obj->state32->flags &= ~ 0b100011010101;
         this->op_obj->state32->flags |= res2; // C
     }
+
+
+    printk("OPEMU: pcmpistrm %s\n", ud_insn_asm(this->op_obj->ud_obj));
 }
+
+//#define printk(...)
 
 static void getmemoperand(ssse3_t *this, uint8_t *size, uint64_t *retval)
 {
     int64_t disp = 0;
     uint8_t disp_size = this->udo_src->offset;
-    uint64_t address;
+    uint64_t address = 0;
 
-    if (this->udo_src->scale) return; // TODO
+    if (this->udo_src->scale)
+    {
+        printk("UNIMPLEMENTED!\n");
+        return; // TODO
+    }
 
-    if (retrieve_reg (this->op_obj->state, this->udo_src->base, size, &address) != 0) return;
+    if (retrieve_reg (this->op_obj->state, this->udo_src->base, size, &address) != 0)
+    {
+        printk("SKIP ADDRESS\n");
+        return;
+    }
+
+
+    printk("ADDRESS 0x%X %d %d\n",address,disp_size,*size);
 
     switch (disp_size) {
-        case 8: disp = this->udo_src->lval.sbyte; break;
+        case 8:  disp = this->udo_src->lval.sbyte; break;
         case 16: disp = this->udo_src->lval.sword; break;
         case 32: disp = this->udo_src->lval.sdword; break;
         case 64: disp = this->udo_src->lval.sqword; break;
@@ -605,52 +626,65 @@ static void getmemoperand(ssse3_t *this, uint8_t *size, uint64_t *retval)
 
     address += disp;
 
+    if (this->extended)
+    {
+        printk("EXTENDED\n");
+    }
+
     if (this->op_obj->ring0)
     {
         retval[0] = *((uint64_t*)(address));
+        printk("RETVAL  %llu\n",*((uint64_t*)(address)));
     }
     else{
+
+        //*size = this->udo_src->size / 8; //FIXME:
+
         unsigned long status =
-        copy_from_user ((char*) &retval[0], (uint64_t*)address, 8);
+        copy_from_user ((char*) &retval[0], (uint64_t*)address,this->udo_src->size / 8 );// FIXME: XXX: WHERE GET VALUE FOR LAST ARG?
+
+        printk("COPY FROM USEER  %llu %llu\n",*retval,*size);
         if(status != 0)
         {
             //FIXME: need handle, no just allert
             printk("OPEMU:ERROR copy_from_user() status %lu %s %d",status,__FILE__,__LINE__);
         }
     }
+
+    printk("OPEMU: getmemoperand %s\n", ud_insn_asm(this->op_obj->ud_obj));
 }
 
-void pcmpistrm	(ssse3_t *this)
+void pcmpistrm    (ssse3_t *this)
 {
-	const int imm = this->udo_imm->lval.ubyte;
-	//const int issigned = imm & 0b10;
+    const int imm = this->udo_imm->lval.ubyte;
+    //const int issigned = imm & 0b10;
     uint8_t islongmode = is_saved_state64(this->op_obj->state);
 
-	__int128_t *src = &(this->src.int128);
-	__int128_t *dst = &(this->dst.int128);
+    __int128_t *src = &(this->src.int128);
+    __int128_t *dst = &(this->dst.int128);
     __int128_t *res = &(this->res.int128);
 
-	int res2 = 0;
+    int res2 = 0;
 
-	/* thanks for excusing me the nesting */
+    /* thanks for excusing me the nesting */
 
     *res = cmp_im(src, dst, imm, &res2);
 
 #if 0
-	printf("src: ");
-	print128(this->src);
-	printf("\n");
+    printf("src: ");
+    print128(this->src);
+    printf("\n");
 
-	printf("dst: ");
-	print128(this->dst);
-	printf("\n");
+    printf("dst: ");
+    print128(this->dst);
+    printf("\n");
 
-	printf("res: ");
-	print128(this->res);
-	printf("\n");
+    printf("res: ");
+    print128(this->res);
+    printf("\n");
 
-	printf("and the int2 is %02x\n", res2);
-	printf("and the index  is %d\n", res1);
+    printf("and the int2 is %02x\n", res2);
+    printf("and the index  is %d\n", res1);
 #endif
 
     if (islongmode)
@@ -663,10 +697,12 @@ void pcmpistrm	(ssse3_t *this)
     }
 }
 
-void pcmpgtq	(ssse3_t *this)
+void pcmpgtq    (ssse3_t *this)
 {
     this->res.int64[0] = this->src.int64[0] > this->dst.int64[0] ? 0xFFFFFFFFFFFFFFFFLL : 0;
     this->res.int64[1] = this->src.int64[1] > this->dst.int64[1] ? 0xFFFFFFFFFFFFFFFFLL : 0;
+
+    printk("OPEMU: pcmpgtq %s\n", ud_insn_asm(this->op_obj->ud_obj));
 }
 
 static int
@@ -688,7 +724,7 @@ do_popcnt (uint64_t val, uint8_t len)
 }
 
 // TODO: Add memory operand retrieval for val
-void popcnt	(ssse3_t *this)
+void popcnt    (ssse3_t *this)
 {
     int ret = 0;
     uint64_t val = 0;
@@ -702,6 +738,8 @@ void popcnt	(ssse3_t *this)
     }
     ret = do_popcnt(val, size);
     store_reg(this->op_obj->state, this->udo_dst->base, (uint64_t)ret);
+
+    printk("OPEMU: popcnt %s\n", ud_insn_asm(this->op_obj->ud_obj));
 }
 
 static void
@@ -943,36 +981,76 @@ void crc32_op (ssse3_t *this)
     uint8_t size_a = 0;
     uint8_t size_b = 0;
 
-    retrieve_reg(this->op_obj->state, this->udo_dst->base, &size_a, &val_a);
+
+
+
+    //retrieve_reg(this->op_obj->state, this->udo_dst->base, &size_a, &val_a);
+
     if (this->udo_src->type == UD_OP_REG)
     {
         retrieve_reg(this->op_obj->state, this->udo_src->base, &size_b, &val_b);
     } else {
+        printk("getmemoperand SRC B %d\n",this->udo_src->base);
         getmemoperand(this, &size_b, &val_b);
+
+        switch(this->udo_src->type)
+        {
+            case UD_OP_REG: printk("SRC IS UD_OP_REG:\n");break;
+            case UD_OP_MEM:printk("SRC IS  UD_OP_MEM:\n");break;
+            case UD_OP_PTR:printk("SRC IS  UD_OP_PTR:\n");break;
+            case UD_OP_IMM:printk("SRC IS  UD_OP_IMM:\n");break;
+            case UD_OP_JIMM:printk("SRC IS  UD_OP_JIMM:\n");break;
+            case UD_OP_CONST:printk("SRC IS  UD_OP_CONST:\n");break;
+        }
+
+
+
+
     }
+
+    if (this->udo_dst->type == UD_OP_REG)
+    {
+        retrieve_reg(this->op_obj->state, this->udo_dst->base, &size_a, &val_a);
+    } else {
+        printk("getmemoperand DST A\n");
+        getmemoperand(this, &size_a, &val_a);
+    }
+
+
+    printk("******* BBB %llu %llu\n",val_b,size_b);
+    printk("******* AAA %llu %llu\n",val_a,size_a);
 
     switch (size_b)
     {
         case 1:
+            printk("1 BYTE DATA\n");
             dst = compute_crc32_8 ((uint32_t)val_a, (uint8_t)val_b);
             break;
 
         case 2:
+
+            printk("2 BYTE DATA\n");
             dst = compute_crc32_16 ((uint32_t)val_a, (uint16_t)val_b);
             break;
 
         case 4:
+
+            printk("4 BYTE DATA\n");
             dst = compute_crc32_32 ((uint32_t)val_a, (uint32_t)val_b);
             break;
 
         case 8:
-            dst = compute_crc32_64 (val_a, (uint64_t)val_b);
+
+            printk("8 BYTE DATA\n");
+            dst = compute_crc32_64 (val_a,val_b);
             break;
 
         default:
+            printk("OOOOOOOOOOOOVER 8888888 BYYYYYYYTES!!!!\n");
             return;
     }
 
     store_reg(this->op_obj->state, this->udo_dst->base, (uint64_t)dst);
-
+    printk("CRC32VAL %llu CRCMODE %d  valA %llu valB %llu\n",dst,size_b,val_a,val_b);
+    printk("OPEMU: crc32_op %s\n", ud_insn_asm(this->op_obj->ud_obj));
 }
