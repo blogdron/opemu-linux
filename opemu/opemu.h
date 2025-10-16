@@ -47,30 +47,30 @@ is_saved_state64(struct pt_regs *regs)
 
 
 struct op {
-	// one of either. order here matters.
-	union {
-		struct pt_regs *state64;
-		struct pt_regs *state32;
-	};
+    // one of either. order here matters.
+    union {
+        struct pt_regs *state64;
+        struct pt_regs *state32;
+    };
 
-	enum {
-		SAVEDSTATE_64,
-		SAVEDSTATE_32,
-	} state_flavor;
+    enum {
+        SAVEDSTATE_64,
+        SAVEDSTATE_32,
+    } state_flavor;
 
-	// just another version of the above
-	struct pt_regs *state;
+    // just another version of the above
+    struct pt_regs *state;
 
-	// disassembly object
-	ud_t		*ud_obj;
+    // disassembly object
+    ud_t        *ud_obj;
 
-	uint8_t	dst64;
-	uint8_t	dst32;
+    uint8_t    dst64;
+    uint8_t    dst32;
 
-	uint64_t	res64;
-	uint32_t	res32;
-	// boolean flag
-	uint8_t		ring0;
+    uint64_t    res64;
+    uint32_t    res32;
+    // boolean flag
+    uint8_t        ring0;
 };
 typedef struct op op_t;
 

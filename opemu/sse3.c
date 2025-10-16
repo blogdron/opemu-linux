@@ -19,35 +19,35 @@
  */
 int sse3_grab_operands(sse3_t *sse3_obj)
 {
-	if (sse3_obj->ismmx) {
-		_store_mmx (sse3_obj->udo_dst->base - UD_R_MM0, &sse3_obj->dst.uint64[0]);
-		if (sse3_obj->udo_src->type == UD_OP_REG) {
-			_store_mmx (sse3_obj->udo_src->base - UD_R_MM0, &sse3_obj->src.uint64[0]);
-		} else {
-			// m64 load
-			int64_t disp = 0;
-			uint8_t disp_size = sse3_obj->udo_src->offset;
-			uint64_t address;
+    if (sse3_obj->ismmx) {
+        _store_mmx (sse3_obj->udo_dst->base - UD_R_MM0, &sse3_obj->dst.uint64[0]);
+        if (sse3_obj->udo_src->type == UD_OP_REG) {
+            _store_mmx (sse3_obj->udo_src->base - UD_R_MM0, &sse3_obj->src.uint64[0]);
+        } else {
+            // m64 load
+            int64_t disp = 0;
+            uint8_t disp_size = sse3_obj->udo_src->offset;
+            uint64_t address;
 
-			if (sse3_obj->udo_src->scale) goto bad; // TODO
+            if (sse3_obj->udo_src->scale) goto bad; // TODO
 
-			if (retrieve_reg (sse3_obj->op_obj->state,
-				sse3_obj->udo_src->base, NULL, &address) != 0) goto bad;
+            if (retrieve_reg (sse3_obj->op_obj->state,
+                sse3_obj->udo_src->base, NULL, &address) != 0) goto bad;
 
-			switch (disp_size) {
-			case 8: disp = sse3_obj->udo_src->lval.sbyte; break;
-			case 16: disp = sse3_obj->udo_src->lval.sword; break;
-			case 32: disp = sse3_obj->udo_src->lval.sdword; break;
-			case 64: disp = sse3_obj->udo_src->lval.sqword; break;
-			}
-
-			address += disp;
-
-			if (sse3_obj->op_obj->ring0)
-            {
-				sse3_obj->src.uint64[0] = * ((uint64_t*) (address));
+            switch (disp_size) {
+            case 8: disp = sse3_obj->udo_src->lval.sbyte; break;
+            case 16: disp = sse3_obj->udo_src->lval.sword; break;
+            case 32: disp = sse3_obj->udo_src->lval.sdword; break;
+            case 64: disp = sse3_obj->udo_src->lval.sqword; break;
             }
-			else
+
+            address += disp;
+
+            if (sse3_obj->op_obj->ring0)
+            {
+                sse3_obj->src.uint64[0] = * ((uint64_t*) (address));
+            }
+            else
             {
                 unsigned long status =
                 copy_from_user((char*) &sse3_obj->src.uint64[0], (uint64_t*)address, 8);
@@ -57,36 +57,36 @@ int sse3_grab_operands(sse3_t *sse3_obj)
                     printk("OPEMU:ERROR copy_from_user() status %lu %s %d",status,__FILE__,__LINE__);
                 }
             }
-		}
-	} else {
-		_store_xmm (sse3_obj->udo_dst->base - UD_R_XMM0, &sse3_obj->dst.uint128);
-		if (sse3_obj->udo_src->type == UD_OP_REG) {
-			_store_xmm (sse3_obj->udo_src->base - UD_R_XMM0, &sse3_obj->src.uint128);
-		} else {
-			// m128 load
-			int64_t disp = 0;
-			uint8_t disp_size = sse3_obj->udo_src->offset;
-			uint64_t address;
+        }
+    } else {
+        _store_xmm (sse3_obj->udo_dst->base - UD_R_XMM0, &sse3_obj->dst.uint128);
+        if (sse3_obj->udo_src->type == UD_OP_REG) {
+            _store_xmm (sse3_obj->udo_src->base - UD_R_XMM0, &sse3_obj->src.uint128);
+        } else {
+            // m128 load
+            int64_t disp = 0;
+            uint8_t disp_size = sse3_obj->udo_src->offset;
+            uint64_t address;
 
-			if (sse3_obj->udo_src->scale) goto bad; // TODO
+            if (sse3_obj->udo_src->scale) goto bad; // TODO
 
-			if (retrieve_reg (sse3_obj->op_obj->state,
-				sse3_obj->udo_src->base, NULL, &address) != 0) goto bad;
+            if (retrieve_reg (sse3_obj->op_obj->state,
+                sse3_obj->udo_src->base, NULL, &address) != 0) goto bad;
 
-			switch (disp_size) {
-			case 8: disp = sse3_obj->udo_src->lval.sbyte; break;
-			case 16: disp = sse3_obj->udo_src->lval.sword; break;
-			case 32: disp = sse3_obj->udo_src->lval.sdword; break;
-			case 64: disp = sse3_obj->udo_src->lval.sqword; break;
-			}
-
-			address += disp;
-
-			if (sse3_obj->op_obj->ring0)
-            {
-				sse3_obj->src.uint128 = * ((__uint128_t*) (address));
+            switch (disp_size) {
+            case 8: disp = sse3_obj->udo_src->lval.sbyte; break;
+            case 16: disp = sse3_obj->udo_src->lval.sword; break;
+            case 32: disp = sse3_obj->udo_src->lval.sdword; break;
+            case 64: disp = sse3_obj->udo_src->lval.sqword; break;
             }
-			else
+
+            address += disp;
+
+            if (sse3_obj->op_obj->ring0)
+            {
+                sse3_obj->src.uint128 = * ((__uint128_t*) (address));
+            }
+            else
             {
                 unsigned long status =
                 copy_from_user((char*) &sse3_obj->src.uint128, (uint64_t*)address, 16);
@@ -96,13 +96,12 @@ int sse3_grab_operands(sse3_t *sse3_obj)
                     printk("OPEMU:ERROR copy_from_user() status %lu %s %d",status,__FILE__,__LINE__);
                 }
             }
-		}
-	}
-
+        }
+    }
     return 0;
 
     // Only reached if bad
-bad:	return -1;
+bad: return -1;
 }
 
 /**
@@ -111,16 +110,16 @@ bad:	return -1;
  */
 int sse3_commit_results(const sse3_t *sse3_obj)
 {
-	if (sse3_obj->ismmx) {
-		_load_mmx (sse3_obj->udo_dst->base - UD_R_MM0, (void*) &sse3_obj->res.uint64[0]);
-	} else {
-		_load_xmm (sse3_obj->udo_dst->base - UD_R_XMM0, (void*) &sse3_obj->res.uint128);
-	}
+    if (sse3_obj->ismmx) {
+        _load_mmx (sse3_obj->udo_dst->base - UD_R_MM0, (void*) &sse3_obj->res.uint64[0]);
+    } else {
+        _load_xmm (sse3_obj->udo_dst->base - UD_R_XMM0, (void*) &sse3_obj->res.uint128);
+    }
 
     return 0;
 
     // Only reached if bad
-//bad:	return -1;
+//bad:    return -1;
 }
 
 
@@ -133,14 +132,14 @@ int sse3_commit_results(const sse3_t *sse3_obj)
  */
 int op_sse3_run(const op_t *op_obj)
 {
-	sse3_t sse3_obj;
-	sse3_obj.op_obj = op_obj;
-	const uint32_t mnemonic = ud_insn_mnemonic(sse3_obj.op_obj->ud_obj);
-	sse3_func opf;
+    sse3_t sse3_obj;
+    sse3_obj.op_obj = op_obj;
+    const uint32_t mnemonic = ud_insn_mnemonic(sse3_obj.op_obj->ud_obj);
+    sse3_func opf;
 
-	switch (mnemonic) {
-	case UD_Iaddsubpd:	opf = addsubpd;	goto sse3_common;
-	case UD_Iaddsubps:	opf = addsubps;	goto sse3_common;
+    switch (mnemonic) {
+    case UD_Iaddsubpd:    opf = addsubpd;    goto sse3_common;
+    case UD_Iaddsubps:    opf = addsubps;    goto sse3_common;
     case UD_Ihaddpd:    opf = haddpd; goto sse3_common;
     case UD_Ihaddps:    opf = haddpd; goto sse3_common;
     case UD_Ihsubpd:    opf = hsubpd; goto sse3_common;
@@ -154,39 +153,39 @@ int op_sse3_run(const op_t *op_obj)
     case UD_Imonitor:   goto good;
 sse3_common:
 
-	sse3_obj.udo_src = ud_insn_opr (op_obj->ud_obj, 1);
-	sse3_obj.udo_dst = ud_insn_opr (op_obj->ud_obj, 0);
-	sse3_obj.udo_imm = ud_insn_opr (op_obj->ud_obj, 2);
+    sse3_obj.udo_src = ud_insn_opr (op_obj->ud_obj, 1);
+    sse3_obj.udo_dst = ud_insn_opr (op_obj->ud_obj, 0);
+    sse3_obj.udo_imm = ud_insn_opr (op_obj->ud_obj, 2);
 
-	// run some sanity checks,
-	if (sse3_obj.udo_dst->type != UD_OP_REG) goto bad;
-	if ((sse3_obj.udo_src->type != UD_OP_REG)
-		&& (sse3_obj.udo_src->type != UD_OP_MEM))
-		goto bad;
+    // run some sanity checks,
+    if (sse3_obj.udo_dst->type != UD_OP_REG) goto bad;
+    if ((sse3_obj.udo_src->type != UD_OP_REG)
+        && (sse3_obj.udo_src->type != UD_OP_MEM))
+        goto bad;
 
-	// i'd like to know if this instruction is legacy mmx
-	if ((sse3_obj.udo_dst->base >= UD_R_MM0)
-		&& (sse3_obj.udo_dst->base <= UD_R_MM7)) {
-		sse3_obj.ismmx = 1;
-	} else sse3_obj.ismmx = 0;
+    // i'd like to know if this instruction is legacy mmx
+    if ((sse3_obj.udo_dst->base >= UD_R_MM0)
+        && (sse3_obj.udo_dst->base <= UD_R_MM7)) {
+        sse3_obj.ismmx = 1;
+    } else sse3_obj.ismmx = 0;
 
-	if (sse3_grab_operands(&sse3_obj) != 0) goto bad;
+    if (sse3_grab_operands(&sse3_obj) != 0) goto bad;
 
-	opf(&sse3_obj);
+    opf(&sse3_obj);
 
-	if (sse3_commit_results(&sse3_obj)) goto bad;
+    if (sse3_commit_results(&sse3_obj)) goto bad;
 
-	goto good;
+    goto good;
 
-	default: goto bad;
-	}
+    default: goto bad;
+    }
 
 good:
-	return 0;
+    return 0;
 
     // Only reached if bad
 bad:
-	return -1;
+    return -1;
 }
 
 void fisttp(sse3_t *this)

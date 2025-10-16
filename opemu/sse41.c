@@ -127,148 +127,133 @@ void pmovsxdq(ssse3_t *this)
 
 void pmovzxbw(ssse3_t *this)
 {
-	int8_t  * temp1 = ((int8_t *)&this->src.uint128);
-	int16_t * temp2 = ((int16_t *)&this->dst.uint128);
+    int8_t  * temp1 = ((int8_t *)&this->src.uint128);
+    int16_t * temp2 = ((int16_t *)&this->dst.uint128);
 
-	temp2[0] = temp1[0] > 127 ? 0xFF00 | temp1[0] : temp1[0];
-	temp2[1] = temp1[1] > 127 ? 0xFF00 | temp1[1] : temp1[1];
-	temp2[2] = temp1[2] > 127 ? 0xFF00 | temp1[2] : temp1[2];
-	temp2[3] = temp1[3] > 127 ? 0xFF00 | temp1[3] : temp1[3];
-	temp2[4] = temp1[4] > 127 ? 0xFF00 | temp1[4] : temp1[4];
-	temp2[5] = temp1[5] > 127 ? 0xFF00 | temp1[5] : temp1[5];
-	temp2[6] = temp1[6] > 127 ? 0xFF00 | temp1[6] : temp1[6];
-	temp2[7] = temp1[7] > 127 ? 0xFF00 | temp1[7] : temp1[7];
-
-	this->res.uint128 = *((__uint128_t*) temp2);
+    temp2[0] = temp1[0] > 127 ? 0xFF00 | temp1[0] : temp1[0];
+    temp2[1] = temp1[1] > 127 ? 0xFF00 | temp1[1] : temp1[1];
+    temp2[2] = temp1[2] > 127 ? 0xFF00 | temp1[2] : temp1[2];
+    temp2[3] = temp1[3] > 127 ? 0xFF00 | temp1[3] : temp1[3];
+    temp2[4] = temp1[4] > 127 ? 0xFF00 | temp1[4] : temp1[4];
+    temp2[5] = temp1[5] > 127 ? 0xFF00 | temp1[5] : temp1[5];
+    temp2[6] = temp1[6] > 127 ? 0xFF00 | temp1[6] : temp1[6];
+    temp2[7] = temp1[7] > 127 ? 0xFF00 | temp1[7] : temp1[7];
+    this->res.uint128 = *((__uint128_t*) temp2);
 }
 
 void pmovzxbd(ssse3_t *this)
 {
-	uint8_t  * temp1 = (uint8_t *)&this->src.uint128;
-	uint32_t * temp2 = (uint32_t *)&this->dst.uint128;
+    uint8_t  * temp1 = (uint8_t *)&this->src.uint128;
+    uint32_t * temp2 = (uint32_t *)&this->dst.uint128;
 
-	temp2[0] = temp1[0] > 127 ? 0xFFFF00 | temp1[0] : (uint32_t) temp1[0];
-	temp2[1] = temp1[1] > 127 ? 0xFFFF00 | temp1[1] : (uint32_t) temp1[1];
-	temp2[2] = temp1[2] > 127 ? 0xFFFF00 | temp1[2] : (uint32_t) temp1[2];
-	temp2[3] = temp1[3] > 127 ? 0xFFFF00 | temp1[3] : (uint32_t) temp1[3];
-
-	this->res.uint128 = *((__uint128_t*) temp2);
+    temp2[0] = temp1[0] > 127 ? 0xFFFF00 | temp1[0] : (uint32_t) temp1[0];
+    temp2[1] = temp1[1] > 127 ? 0xFFFF00 | temp1[1] : (uint32_t) temp1[1];
+    temp2[2] = temp1[2] > 127 ? 0xFFFF00 | temp1[2] : (uint32_t) temp1[2];
+    temp2[3] = temp1[3] > 127 ? 0xFFFF00 | temp1[3] : (uint32_t) temp1[3];
+    this->res.uint128 = *((__uint128_t*) temp2);
 }
 
 void pmovzxbq(ssse3_t *this)
 {
-	uint8_t* temp1 = (uint8_t*)&this->src.uint128;
-	uint64_t* temp2 = (uint64_t*)&this->dst.uint128;
+    uint8_t* temp1 = (uint8_t*)&this->src.uint128;
+    uint64_t* temp2 = (uint64_t*)&this->dst.uint128;
 
-	temp2[0] = 0x00000000000000FF & temp1[0];
-	temp2[1] = 0x00000000000000FF & temp1[1];
-
-	this->res.uint128 = *((__uint128_t*) temp2);
+    temp2[0] = 0x00000000000000FF & temp1[0];
+    temp2[1] = 0x00000000000000FF & temp1[1];
+    this->res.uint128 = *((__uint128_t*) temp2);
 }
 
 void pmovzxwd(ssse3_t *this)
 {
-	uint16_t* temp1 = (uint16_t*)&this->src.uint128;
-	uint32_t* temp2 = (uint32_t*)&this->dst.uint128;
+    uint16_t* temp1 = (uint16_t*)&this->src.uint128;
+    uint32_t* temp2 = (uint32_t*)&this->dst.uint128;
 
-	temp2[0] = 0x0000FFFF & temp1[0];
-	temp2[1] = 0x0000FFFF & temp1[1];
-	temp2[2] = 0x0000FFFF & temp1[2];
-	temp2[3] = 0x0000FFFF & temp1[3];
-
-	this->res.uint128 = *((__uint128_t*) temp2);
+    temp2[0] = 0x0000FFFF & temp1[0];
+    temp2[1] = 0x0000FFFF & temp1[1];
+    temp2[2] = 0x0000FFFF & temp1[2];
+    temp2[3] = 0x0000FFFF & temp1[3];
+    this->res.uint128 = *((__uint128_t*) temp2);
 }
 
 void pmovzxwq(ssse3_t *this)
 {
-	uint16_t* temp1 = (uint16_t*)&this->src.uint128;
-	uint64_t* temp2 = (uint64_t*)&this->dst.uint128;
+    uint16_t* temp1 = (uint16_t*)&this->src.uint128;
+    uint64_t* temp2 = (uint64_t*)&this->dst.uint128;
 
-	temp2[0] = 0x000000000000FFFF & temp1[0];
-	temp2[1] = 0x000000000000FFFF & temp1[1];
-
-	this->res.uint128 = *((__uint128_t*) temp2);
+    temp2[0] = 0x000000000000FFFF & temp1[0];
+    temp2[1] = 0x000000000000FFFF & temp1[1];
+    this->res.uint128 = *((__uint128_t*) temp2);
 }
 
 void pmovzxdq(ssse3_t *this)
 {
-	uint32_t* temp1 = (uint32_t*)&this->src.uint128;
-	uint64_t* temp2 = (uint64_t*)&this->dst.uint128;
+    uint32_t* temp1 = (uint32_t*)&this->src.uint128;
+    uint64_t* temp2 = (uint64_t*)&this->dst.uint128;
 
-	temp2[0] = 0x00000000FFFFFFFF & temp1[0];
-	temp2[1] = 0x00000000FFFFFFFF & temp1[1];
-
-	this->res.uint128 = *((__uint128_t*) temp2);
+    temp2[0] = 0x00000000FFFFFFFF & temp1[0];
+    temp2[1] = 0x00000000FFFFFFFF & temp1[1];
+    this->res.uint128 = *((__uint128_t*) temp2);
 }
 
 void pextrb(ssse3_t *this)
 {
-	uint8_t sel = this->udo_imm->lval.ubyte & 0xF;
-	uint8_t temp1 = this->src.uint8[sel];
+    uint8_t sel = this->udo_imm->lval.ubyte & 0xF;
+    uint8_t temp1 = this->src.uint8[sel];
     uint8_t islongmode = is_saved_state64(this->op_obj->state);
 
-	if (this->udo_dst->type == UD_OP_MEM) {
-		this->res.uint8[0] = temp1;
-		printk("pextrb this->udo_dst->type == UD_OP_MEM this->res.uint8[0]: %hhu", temp1);
-	}
-	else if (islongmode && this->udo_dst->size == 64) {
-		this->res.uint64[0] = 0;
-		this->res.uint8[0] = temp1;
-		printk("pextrb islongmode && this->udo_dst->size == 64 this->res.uint64[0]: %hhu", temp1);
-	}
-	else {
-		this->res.uint32[0] = 0;
-		this->res.uint8[0] = temp1;
-		printk("pextrb this->res.uint32[0]: %hhu", temp1);
-	}
-	printk("OPEMU:  %s\n", ud_insn_asm(this->op_obj->ud_obj));
-
+    if (this->udo_dst->type == UD_OP_MEM) {
+        this->res.uint8[0] = temp1;
+        printk("pextrb this->udo_dst->type == UD_OP_MEM this->res.uint8[0]: %hhu", temp1);
+    }
+    else if (islongmode && this->udo_dst->size == 64) {
+        this->res.uint64[0] = 0;
+        this->res.uint8[0] = temp1;
+        printk("pextrb islongmode && this->udo_dst->size == 64 this->res.uint64[0]: %hhu", temp1);
+    }
+    else {
+        this->res.uint32[0] = 0;
+        this->res.uint8[0] = temp1;
+        printk("pextrb this->res.uint32[0]: %hhu", temp1);
+    }
 }
 
 void pextrd(ssse3_t *this)
 {
-	uint8_t sel = this->udo_imm->lval.ubyte & 3;
+    uint8_t sel = this->udo_imm->lval.ubyte & 3;
     this->res.uint32[0] = 0;
     this->res.uint32[0] = this->src.uint32[sel];
-    //printk("temp1: %hhu", this->res.uint64[0]);
-    //printk("2temp1: %hhu", this->res.uint128);
-	printk("OPEMU: pextrd %s\n", ud_insn_asm(this->op_obj->ud_obj));
-    //printk("e %u", this->res.uint64[0]);
 }
 
 void pextrq(ssse3_t *this)
 {
-	uint8_t sel = this->udo_imm->lval.ubyte & 1;
-	uint64_t temp1 = this->src.uint64[sel];
+    uint8_t sel = this->udo_imm->lval.ubyte & 1;
+    uint64_t temp1 = this->src.uint64[sel];
     uint8_t islongmode = is_saved_state64(this->op_obj->state);
 
-	if (this->udo_dst->type == UD_OP_MEM) {
-		this->res.uint128 = temp1;
-		printk("pextrq this->udo_dst->type == UD_OP_MEM this->res.uint128: %llu", temp1);
-	}
-	else if (islongmode && this->udo_dst->size == 128) {
-		this->res.uint128 = 0;
-		this->res.uint128 = temp1;
-		printk("pextrq islongmode && this->udo_dst->size == 128 this->res.uint128: %llu", temp1);
-	}
-	else if (islongmode && this->udo_dst->size == 64) {
-		this->res.uint64[0] = 0;
-		this->res.uint64[0] = temp1;
-		//printk("pextrq islongmode && this->udo_dst->size == 64 this->res.uint64[0]: %hhu", temp1);
-	}
-	else {
-		this->res.uint32[0] = 0;
-		this->res.uint32[0] = temp1;
-		printk("pextrq this->res.uint32[0]: %llu", temp1);
-	}
-	//printk("OPEMU:  %s\n", ud_insn_asm(this->op_obj->ud_obj));
-
+    if (this->udo_dst->type == UD_OP_MEM) {
+        this->res.uint128 = temp1;
+        printk("pextrq this->udo_dst->type == UD_OP_MEM this->res.uint128: %llu", temp1);
+    }
+    else if (islongmode && this->udo_dst->size == 128) {
+        this->res.uint128 = 0;
+        this->res.uint128 = temp1;
+        printk("pextrq islongmode && this->udo_dst->size == 128 this->res.uint128: %llu", temp1);
+    }
+    else if (islongmode && this->udo_dst->size == 64) {
+        this->res.uint64[0] = 0;
+        this->res.uint64[0] = temp1;
+        printk("pextrq islongmode && this->udo_dst->size == 64 this->res.uint64[0]: %hhu", temp1);
+    } else {
+        this->res.uint32[0] = 0;
+        this->res.uint32[0] = temp1;
+        printk("pextrq this->res.uint32[0]: %llu", temp1);
+    }
 }
 
 void roundss(ssse3_t *this)
 {
-	kernel_fpu_begin();
-	uint8_t imm = this->udo_imm->lval.ubyte;
+    kernel_fpu_begin();
+    uint8_t imm = this->udo_imm->lval.ubyte;
     int rc;
     int msi = (imm >> 2) & 1;
     if (msi == 0) {
@@ -277,22 +262,21 @@ void roundss(ssse3_t *this)
         //get mxcsr round control
         rc = getmxcsr();
     }
-	this->res.fa32[0] = round_fp32(this->src.fa32[0], rc);
-	//printk("roundss this->res.uint32[0]: %hhu", this->res.uint32[0]);
-	//printk("roundss this->res.uint32[1]: %hhu", this->res.uint32[1]);
-	//printk("roundss this->res.uint32[2]: %hhu", this->res.uint32[2]);
-	//printk("roundss this->res.uint32[3]: %hhu", this->res.uint32[3]);
-	//printk("roundss temp1: %hhu", temp1);
-	//printk("roundss this->src.uint32[0]: %hhu", this->src.uint32[0]);
-	kernel_fpu_end();
+    this->res.fa32[0] = round_fp32(this->src.fa32[0], rc);
+    //printk("roundss this->res.uint32[0]: %hhu", this->res.uint32[0]);
+    //printk("roundss this->res.uint32[1]: %hhu", this->res.uint32[1]);
+    //printk("roundss this->res.uint32[2]: %hhu", this->res.uint32[2]);
+    //printk("roundss this->res.uint32[3]: %hhu", this->res.uint32[3]);
+    //printk("roundss temp1: %hhu", temp1);
+    //printk("roundss this->src.uint32[0]: %hhu", this->src.uint32[0]);
+    kernel_fpu_end();
 }
 
-
+//TODO: expect ptest opcode
 void ptest(ssse3_t *this)
 {
-    //struct pt_regs *regs;
-    uint64_t FLAGS;
-    FLAGS = 0;//regs->flags;
+    struct pt_regs *regs = this->op_obj->state;
+    uint64_t FLAGS = regs->flags;
 
     sse_reg_t AND1, AND2;
 
@@ -316,39 +300,27 @@ void ptest(ssse3_t *this)
     FLAGS = (FLAGS | 0x00000080) ^ 0x00000080;  //set SF = 0
     FLAGS = (FLAGS | 0x00000004) ^ 0x00000004;  //set PF = 0
 
-    //regs->flags = FLAGS;
+    printk("OPEMU: ptest %s\n", ud_insn_asm(this->op_obj->ud_obj));
+    //regs->flags = FLAGS; //TODO: need update flags?
 }
 
 void pinsrb(ssse3_t *this)
 {
-	uint8_t sel = this->udo_imm->lval.ubyte & 0xF;
-	//uint32_t mask = 0xFFFFFFFF << (sel * 32);
-    //printk("1temp1: %hhu", this->dst.uint128);
-	//uint32_t res = &this->res.uint128;
-	this->dst.uint8[sel] = this->src.uint8[0];
-	this->res.uint128 = this->dst.uint128;
-	printk("OPEMU: pinsrb %s\n", ud_insn_asm(this->op_obj->ud_obj));
-
+    uint8_t sel = this->udo_imm->lval.ubyte & 0xF;
+    this->dst.uint8[sel] = this->src.uint8[0];
+    this->res.uint128 = this->dst.uint128;
 }
 
 void pinsrd(ssse3_t *this)
 {
-	uint8_t sel = this->udo_imm->lval.ubyte & 3;
-	//uint32_t mask = 0xFFFFFFFF << (sel * 32);
-    //printk("1temp1: %hhu", this->dst.uint128);
-	//uint32_t res = &this->res.uint128;
-	__uint128_t mask = 0xFFFFFFFF << (sel * 32);
-	this->res.uint128 = (this->dst.uint128 & ~mask) | ((this->src.uint128 << (sel * 32)) & mask);
+    uint8_t sel = this->udo_imm->lval.ubyte & 3;
+    __uint128_t mask = 0xFFFFFFFF << (sel * 32);
+    this->res.uint128 = (this->dst.uint128 & ~mask) | ((this->src.uint128 << (sel * 32)) & mask);
 }
 
 void pinsrq(ssse3_t *this)
 {
-	uint8_t sel = this->udo_imm->lval.ubyte & 1;
-	//uint32_t mask = 0xFFFFFFFF << (sel * 32);
-    //printk("1temp1: %hhu", this->dst.uint128);
-	//uint32_t res = &this->res.uint128;
-	this->dst.uint64[sel] = this->src.uint64[0];
-	this->res.uint128 = this->dst.uint128;
-	printk("OPEMU: pinsrq %s\n", ud_insn_asm(this->op_obj->ud_obj));
-
+    uint8_t sel = this->udo_imm->lval.ubyte & 1;
+    this->dst.uint64[sel] = this->src.uint64[0];
+    this->res.uint128 = this->dst.uint128;
 }

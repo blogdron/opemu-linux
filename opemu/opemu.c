@@ -66,122 +66,122 @@ IM      ~ SINETEK
  */
 int opemu_utrap(struct pt_regs *regs)
 {
-	uint8_t islongmode = is_saved_state64(regs);
-	const uint8_t *code_stream;
-	uint8_t bytes_skip = 0;
+    uint8_t islongmode = is_saved_state64(regs);
+    const uint8_t *code_stream;
+    uint8_t bytes_skip = 0;
 
-	ud_t ud_obj;		// disassembler object
-	op_t op_obj;
+    ud_t ud_obj;        // disassembler object
+    op_t op_obj;
 
-	if (islongmode) {
-		code_stream = (const uint8_t*) regs->ip;
-	} else {
-		uint64_t ip = regs->ip; // prevent warning
-		code_stream = (const uint8_t*) ip;
-	}
+    if (islongmode) {
+        code_stream = (const uint8_t*) regs->ip;
+    } else {
+        uint64_t ip = regs->ip; // prevent warning
+        code_stream = (const uint8_t*) ip;
+    }
 
-	ud_init(&ud_obj);
-	ud_set_input_buffer(&ud_obj, code_stream, 15);	// TODO dangerous
-	ud_set_mode(&ud_obj, 64);
-	ud_set_syntax(&ud_obj, UD_SYN_INTEL);
-	ud_set_vendor(&ud_obj, UD_VENDOR_ANY);
+    ud_init(&ud_obj);
+    ud_set_input_buffer(&ud_obj, code_stream, 15);    // TODO dangerous
+    ud_set_mode(&ud_obj, 64);
+    ud_set_syntax(&ud_obj, UD_SYN_INTEL);
+    ud_set_vendor(&ud_obj, UD_VENDOR_ANY);
 
-	bytes_skip = ud_disassemble(&ud_obj);
-	if ( bytes_skip == 0 ) goto bad;
-	//const uint32_t mnemonic = ud_insn_mnemonic(&ud_obj);
-	//printk("OPEMU:  %s\n", ud_insn_asm(&ud_obj));
+    bytes_skip = ud_disassemble(&ud_obj);
+    if ( bytes_skip == 0 ) goto bad;
+    //const uint32_t mnemonic = ud_insn_mnemonic(&ud_obj);
+    //printk("OPEMU:  %s\n", ud_insn_asm(&ud_obj));
 
-	int error = 0;
-	// fill in the opemu object
-	op_obj.state = regs;
-	op_obj.state64 = regs;
-	op_obj.state32 = regs;
-	op_obj.state_flavor = (islongmode) ? SAVEDSTATE_64 : SAVEDSTATE_32;
-	op_obj.ud_obj = &ud_obj;
-	op_obj.ring0 = 0;
+    int error = 0;
+    // fill in the opemu object
+    op_obj.state = regs;
+    op_obj.state64 = regs;
+    op_obj.state32 = regs;
+    op_obj.state_flavor = (islongmode) ? SAVEDSTATE_64 : SAVEDSTATE_32;
+    op_obj.ud_obj = &ud_obj;
+    op_obj.ring0 = 0;
 
-	op_obj.dst64 = op_obj.dst32 = 0 ;
+    op_obj.dst64 = op_obj.dst32 = 0 ;
 
-	error |= op_sse3x_run(&op_obj);
+    error |= op_sse3x_run(&op_obj);
 
-	if (error)
-	{
-		error = 0;
-		error |= op_sse3_run(&op_obj);
-	}
+    if (error)
+    {
+        error = 0;
+        error |= op_sse3_run(&op_obj);
+    }
 
-	if (!error) goto cleanexit;
+    if (!error) goto cleanexit;
 
-	/** fallthru **/
+    /** fallthru **/
 bad:
-	{
-		/* Well, now go in and get the asm text at least.. */
-		const char *instruction_asm;
-		instruction_asm = ud_insn_asm(&ud_obj);
+    {
+        /* Well, now go in and get the asm text at least.. */
+        const char *instruction_asm;
+        instruction_asm = ud_insn_asm(&ud_obj);
 
-		printk("OPEMU:  %s\n", instruction_asm);
-		//i386_exception (EXC_BAD_INSTRUCTION, EXC_I386_INVOP, 0);
-		return 0;
-	}
+        printk("OPEMU:  %s\n", instruction_asm);
+        //i386_exception (EXC_BAD_INSTRUCTION, EXC_I386_INVOP, 0);
+        return 0;
+    }
 
 cleanexit:
-	/*if (islongmode) saved_state64(state)->isf.rip += bytes_skip;
-	else*/
+    /*if (islongmode) saved_state64(state)->isf.rip += bytes_skip;
+    else*/
 
     if (op_obj.dst64)
-		{
-					//printk("oops");
+        {
+                    //printk("oops");
 
-			switch (ud_insn_opr(&ud_obj, 0)->base) {
-				case UD_R_RAX:
-					regs->ax = op_obj.res64;
-					break;
-				case UD_R_RSP:
-					regs->sp = op_obj.res64;
-					break;
-				case UD_R_RCX:
-					regs->cx = op_obj.res64;
-					break;
-				case UD_R_RDX:
-					regs->dx = op_obj.res64;
-					break;
-				case UD_R_RBX:
-					regs->bx = op_obj.res64;
-					break;
+            switch (ud_insn_opr(&ud_obj, 0)->base) {
+                case UD_R_RAX:
+                    regs->ax = op_obj.res64;
+                    break;
+                case UD_R_RSP:
+                    regs->sp = op_obj.res64;
+                    break;
+                case UD_R_RCX:
+                    regs->cx = op_obj.res64;
+                    break;
+                case UD_R_RDX:
+                    regs->dx = op_obj.res64;
+                    break;
+                case UD_R_RBX:
+                    regs->bx = op_obj.res64;
+                    break;
                 default:
                     break;
-			}
-		}
+            }
+        }
 
-	if (op_obj.dst32)
-		{
-					printk("oops32");
+    if (op_obj.dst32)
+        {
+                    printk("oops32");
 
-			switch (ud_insn_opr(&ud_obj, 0)->base) {
-				case UD_R_EAX:
-					regs->ax = op_obj.res32;
-					break;
-				case UD_R_ESP:
-					regs->sp = op_obj.res32;
-					break;
-				case UD_R_ECX:
-					regs->cx = op_obj.res32;
-					break;
-				case UD_R_EDX:
-					regs->dx = op_obj.res32;
-					break;
-				case UD_R_EBX:
-					regs->bx = op_obj.res32;
-					break;
+            switch (ud_insn_opr(&ud_obj, 0)->base) {
+                case UD_R_EAX:
+                    regs->ax = op_obj.res32;
+                    break;
+                case UD_R_ESP:
+                    regs->sp = op_obj.res32;
+                    break;
+                case UD_R_ECX:
+                    regs->cx = op_obj.res32;
+                    break;
+                case UD_R_EDX:
+                    regs->dx = op_obj.res32;
+                    break;
+                case UD_R_EBX:
+                    regs->bx = op_obj.res32;
+                    break;
                 default:
                     break;
-			}
-		}
-	regs->ip += bytes_skip;
-	//thread_exception_return();
-	/** NOTREACHED **/
-	//__builtin_unreachable(); // clang extension
-	return 1;
+            }
+        }
+    regs->ip += bytes_skip;
+    //thread_exception_return();
+    /** NOTREACHED **/
+    //__builtin_unreachable(); // clang extension
+    return 1;
 }
 
 /**
@@ -194,159 +194,159 @@ cleanexit:
  */
 int retrieve_reg(/*const*/ struct pt_regs *regs, const ud_type_t base, uint8_t *length, uint64_t *where)
 {
-	const struct pt_regs *ss64 = regs;
-	const struct pt_regs *ss32 = regs;
-	uint8_t islongmode = is_saved_state64(regs);
+    const struct pt_regs *ss64 = regs;
+    const struct pt_regs *ss32 = regs;
+    uint8_t islongmode = is_saved_state64(regs);
 
-	switch (base) {
+    switch (base) {
 
-	case UD_NONE:
-		*where = 0;
+    case UD_NONE:
+        *where = 0;
         if (length != NULL)
         {
             *length = 0;
         }
-		break;
+        break;
 
-	case UD_R_RIP:
-		*where = ss64 -> ip;
+    case UD_R_RIP:
+        *where = ss64 -> ip;
         if (length != NULL)
         {
             *length = 8;
         }
-		break;
+        break;
 
-	case UD_R_RAX:
-		*where = ss64 -> ax;
+    case UD_R_RAX:
+        *where = ss64 -> ax;
         if (length != NULL)
         {
             *length = 8;
         }
-		break;
+        break;
 
-	case UD_R_RCX:
-		*where = ss64 -> cx;
+    case UD_R_RCX:
+        *where = ss64 -> cx;
         if (length != NULL)
         {
             *length = 8;
         }
-		break;
+        break;
 
-	case UD_R_RDX:
-		*where = ss64 -> dx;
+    case UD_R_RDX:
+        *where = ss64 -> dx;
         if (length != NULL)
         {
             *length = 8;
         }
-		break;
+        break;
 
-	case UD_R_RBX:
-		*where = ss64 -> bx;
+    case UD_R_RBX:
+        *where = ss64 -> bx;
         if (length != NULL)
         {
             *length = 8;
         }
-		break;
+        break;
 
-	case UD_R_RSP:
-		*where = ss64 -> sp;
+    case UD_R_RSP:
+        *where = ss64 -> sp;
         if (length != NULL)
         {
             *length = 8;
         }
-		break;
+        break;
 
-	case UD_R_RBP:
-		*where = ss64 -> bp;
+    case UD_R_RBP:
+        *where = ss64 -> bp;
         if (length != NULL)
         {
             *length = 8;
         }
-		break;
+        break;
 
-	case UD_R_RSI:
-		*where = ss64 -> si;
+    case UD_R_RSI:
+        *where = ss64 -> si;
         if (length != NULL)
         {
             *length = 8;
         }
-		break;
+        break;
 
-	case UD_R_RDI:
-		*where = ss64 -> di;
+    case UD_R_RDI:
+        *where = ss64 -> di;
         if (length != NULL)
         {
             *length = 8;
         }
-		break;
+        break;
 
-	case UD_R_R8:
-		*where = ss64 -> r8;
+    case UD_R_R8:
+        *where = ss64 -> r8;
         if (length != NULL)
         {
             *length = 8;
         }
-		break;
+        break;
 
-	case UD_R_R9:
-		*where = ss64 -> r9;
+    case UD_R_R9:
+        *where = ss64 -> r9;
         if (length != NULL)
         {
             *length = 8;
         }
-		break;
+        break;
 
-	case UD_R_R10:
-		*where = ss64 -> r10;
+    case UD_R_R10:
+        *where = ss64 -> r10;
         if (length != NULL)
         {
             *length = 8;
         }
-		break;
+        break;
 
-	case UD_R_R11:
-		*where = ss64 -> r11;
+    case UD_R_R11:
+        *where = ss64 -> r11;
         if (length != NULL)
         {
             *length = 8;
         }
-		break;
+        break;
 
-	case UD_R_R12:
-		*where = ss64 -> r12;
+    case UD_R_R12:
+        *where = ss64 -> r12;
         if (length != NULL)
         {
             *length = 8;
         }
-		break;
+        break;
 
-	case UD_R_R13:
-		*where = ss64 -> r13;
+    case UD_R_R13:
+        *where = ss64 -> r13;
         if (length != NULL)
         {
             *length = 8;
         }
-		break;
+        break;
 
-	case UD_R_R14:
-		*where = ss64 -> r14;
+    case UD_R_R14:
+        *where = ss64 -> r14;
         if (length != NULL)
         {
             *length = 8;
         }
-		break;
+        break;
 
-	case UD_R_R15:
-		*where = ss64 -> r15;
+    case UD_R_R15:
+        *where = ss64 -> r15;
         if (length != NULL)
         {
             *length = 8;
         }
-		break;
+        break;
 
-	/* 32 bit general purpose */
+    /* 32 bit general purpose */
 
-	case UD_R_EAX:
+    case UD_R_EAX:
         if (islongmode)
         {
             *where = ss64 -> ax & 0xFFFFFFFF;
@@ -357,9 +357,9 @@ int retrieve_reg(/*const*/ struct pt_regs *regs, const ud_type_t base, uint8_t *
         {
             *length = 4;
         }
-		break;
+        break;
 
-	case UD_R_ECX:
+    case UD_R_ECX:
         if (islongmode)
         {
             *where = ss64 -> cx & 0xFFFFFFFF;
@@ -370,9 +370,9 @@ int retrieve_reg(/*const*/ struct pt_regs *regs, const ud_type_t base, uint8_t *
         {
             *length = 4;
         }
-		break;
+        break;
 
-	case UD_R_EDX:
+    case UD_R_EDX:
         if (islongmode)
         {
             *where = ss64 -> dx & 0xFFFFFFFF;
@@ -383,9 +383,9 @@ int retrieve_reg(/*const*/ struct pt_regs *regs, const ud_type_t base, uint8_t *
         {
             *length = 4;
         }
-		break;
+        break;
 
-	case UD_R_EBX:
+    case UD_R_EBX:
         if (islongmode)
         {
             *where = ss64 -> bx & 0xFFFFFFFF;
@@ -396,9 +396,9 @@ int retrieve_reg(/*const*/ struct pt_regs *regs, const ud_type_t base, uint8_t *
         {
             *length = 4;
         }
-		break;
+        break;
 
-	case UD_R_ESP:
+    case UD_R_ESP:
         if (islongmode)
         {
             *where = ss64 -> sp & 0xFFFFFFFF;
@@ -409,9 +409,9 @@ int retrieve_reg(/*const*/ struct pt_regs *regs, const ud_type_t base, uint8_t *
         {
             *length = 4;
         }
-		break;
+        break;
 
-	case UD_R_EBP:
+    case UD_R_EBP:
         if (islongmode)
         {
             *where = ss64 -> bp & 0xFFFFFFFF;
@@ -422,9 +422,9 @@ int retrieve_reg(/*const*/ struct pt_regs *regs, const ud_type_t base, uint8_t *
         {
             *length = 4;
         }
-		break;
+        break;
 
-	case UD_R_ESI:
+    case UD_R_ESI:
         if (islongmode)
         {
             *where = ss64 -> si & 0xFFFFFFFF;
@@ -435,9 +435,9 @@ int retrieve_reg(/*const*/ struct pt_regs *regs, const ud_type_t base, uint8_t *
         {
             *length = 4;
         }
-		break;
+        break;
 
-	case UD_R_EDI:
+    case UD_R_EDI:
         if (islongmode)
         {
             *where = ss64 -> di & 0xFFFFFFFF;
@@ -448,7 +448,7 @@ int retrieve_reg(/*const*/ struct pt_regs *regs, const ud_type_t base, uint8_t *
         {
             *length = 4;
         }
-		break;
+        break;
 
     /* 16 bit general purpose */
 
@@ -662,9 +662,9 @@ int retrieve_reg(/*const*/ struct pt_regs *regs, const ud_type_t base, uint8_t *
         }
         break;
 
-	default: goto bad;
+    default: goto bad;
 
-	}
+    }
 
     return 0;
 
@@ -682,11 +682,11 @@ bad:
  */
 int store_reg(/*const*/ struct pt_regs *regs, const ud_type_t base, uint64_t what)
 {
-	struct pt_regs *ss64 = regs;
-	struct pt_regs *ss32 = regs;
-	uint8_t islongmode = is_saved_state64(regs);
+    struct pt_regs *ss64 = regs;
+    struct pt_regs *ss32 = regs;
+    uint8_t islongmode = is_saved_state64(regs);
 
-	switch (base) {
+    switch (base) {
 
         case UD_R_RIP:
             ss64->ip = what;
@@ -979,7 +979,7 @@ int store_reg(/*const*/ struct pt_regs *regs, const ud_type_t base, uint64_t wha
             break;
 
         default: goto bad;
-	}
+    }
 
     return 0;
 

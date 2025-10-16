@@ -4,26 +4,26 @@
 #include "../libudis86/extern.h"
 
 // log function debug
-#define LF	D("%s\n", __PRETTY_FUNCTION__);
-#define D	printk
+#define LF    D("%s\n", __PRETTY_FUNCTION__);
+#define D    printk
 
 /**
  * 128-bit Register proper for sse3
  * For 64-bit operations, use the same register type, and ignore the high values
  */
 union __attribute__((__packed__)) sse_reg {
-	int8_t		int8[16];
-	int16_t		int16[8];
-	int32_t		int32[4];
-	int64_t		int64[2];
-	__int128_t	int128;
+    int8_t        int8[16];
+    int16_t        int16[8];
+    int32_t        int32[4];
+    int64_t        int64[2];
+    __int128_t    int128;
     float       fa32[4];
-	uint8_t		uint8[16];
-	uint16_t	uint16[8];
-	uint32_t	uint32[4];
-	uint64_t	uint64[2];
+    uint8_t        uint8[16];
+    uint16_t    uint16[8];
+    uint32_t    uint32[4];
+    uint64_t    uint64[2];
     double      fa64[2];
-	__uint128_t	uint128;
+    __uint128_t    uint128;
 };
 typedef union sse_reg sse_reg_t;
 
@@ -31,25 +31,25 @@ typedef union sse_reg sse_reg_t;
  * Print said register to screen. Useful for debugging
  * @param  uint128
  */
-#define print128(x)	printk("0x%016llx%016llx", ((uint64_t*)(&(x)))[1], ((uint64_t*)(&(x)))[0] );
+#define print128(x)    printk("0x%016llx%016llx", ((uint64_t*)(&(x)))[1], ((uint64_t*)(&(x)))[0] );
 
 /**
  * sse3 object
  */
 struct sse3 {
-	uint8_t	extended;	// bool type
+    uint8_t    extended;    // bool type
 
-	sse_reg_t		dst, src;
-	sse_reg_t		res;
+    sse_reg_t        dst, src;
+    sse_reg_t        res;
 
-	// operands
-	const ud_operand_t	*udo_src, *udo_dst, *udo_imm;
+    // operands
+    const ud_operand_t    *udo_src, *udo_dst, *udo_imm;
 
-	// objects
-	const op_t		*op_obj;
+    // objects
+    const op_t        *op_obj;
 
-	// legacy mmx flag
-	uint8_t 		ismmx;
+    // legacy mmx flag
+    uint8_t         ismmx;
 };
 typedef struct sse3 sse3_t;
 
@@ -61,32 +61,32 @@ typedef struct sse3 sse3_t;
 typedef void (*sse3_func)(sse3_t*);
 
 
-#define storedqu_template(n, where)					\
-	do {								\
-	asm __volatile__ ("movdqu %%xmm" #n ", %0" : "=m" (*(where)));	\
-	} while (0);
+#define storedqu_template(n, where)                    \
+    do {                                \
+    asm __volatile__ ("movdqu %%xmm" #n ", %0" : "=m" (*(where)));    \
+    } while (0);
 
-#define loaddqu_template(n, where)					\
-	do {								\
-	asm __volatile__ ("movdqu %0, %%xmm" #n :: "m" (*(where)));	\
-	} while (0);
+#define loaddqu_template(n, where)                    \
+    do {                                \
+    asm __volatile__ ("movdqu %0, %%xmm" #n :: "m" (*(where)));    \
+    } while (0);
 
-#define storeq_template(n, where)					\
-	do {								\
-	asm __volatile__ ("movq %%mm" #n ", %0" : "=m" (*(where)));	\
-	} while (0);
+#define storeq_template(n, where)                    \
+    do {                                \
+    asm __volatile__ ("movq %%mm" #n ", %0" : "=m" (*(where)));    \
+    } while (0);
 
-#define loadq_template(n, where)					\
-	do {								\
-	asm __volatile__ ("movq %0, %%mm" #n :: "m" (*(where)));	\
-	} while (0);
+#define loadq_template(n, where)                    \
+    do {                                \
+    asm __volatile__ ("movq %0, %%mm" #n :: "m" (*(where)));    \
+    } while (0);
 
 /**
  * Store xmm register somewhere in memory
  */
 inline void _store_xmm (const uint8_t n, __uint128_t *where)
 {
-	switch (n) {
+    switch (n) {
 case 0:  storedqu_template(0, where); break;
 case 1:  storedqu_template(1, where); break;
 case 2:  storedqu_template(2, where); break;
@@ -110,7 +110,7 @@ case 15: storedqu_template(15, where); break;
  */
 inline void _load_xmm (const uint8_t n, const __uint128_t *where)
 {
-	switch (n) {
+    switch (n) {
 case 0:  loaddqu_template(0, where); break;
 case 1:  loaddqu_template(1, where); break;
 case 2:  loaddqu_template(2, where); break;
@@ -134,7 +134,7 @@ case 15: loaddqu_template(15, where); break;
  */
 inline void _store_mmx (const uint8_t n, uint64_t *where)
 {
-	switch (n) {
+    switch (n) {
 case 0:  storeq_template(0, where); break;
 case 1:  storeq_template(1, where); break;
 case 2:  storeq_template(2, where); break;
@@ -150,7 +150,7 @@ case 7:  storeq_template(7, where); break;
  */
 inline void _load_mmx (const uint8_t n, const uint64_t *where)
 {
-	switch (n) {
+    switch (n) {
 case 0:  loadq_template(0, where); break;
 case 1:  loadq_template(1, where); break;
 case 2:  loadq_template(2, where); break;
